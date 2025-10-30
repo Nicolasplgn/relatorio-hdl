@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
@@ -517,3 +518,169 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório de Evolução 2025 – HDL Contabilidade</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#1a1a1a] text-gray-200 flex h-screen">
+  <!-- Menu Lateral -->
+  <aside class="w-64 bg-[#111] text-gray-200 flex flex-col fixed h-full p-6 shadow-xl">
+    <h1 class="text-2xl font-bold text-yellow-400 mb-8">HDL Contabilidade</h1>
+    <nav class="space-y-4">
+      <a href="#resumo" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="book-open"></i><span>Resumo</span></a>
+      <a href="#tareffa" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="check-circle"></i><span>Tareffa</span></a>
+      <a href="#digisac" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="message-circle"></i><span>DigiSac</span></a>
+      <a href="#telefonia" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="phone"></i><span>Telefonia IP</span></a>
+      <a href="#agendamento" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="calendar"></i><span>Agendamento</span></a>
+      <a href="#vector" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="trending-up"></i><span>Vector</span></a>
+    </nav>
+  </aside>
+
+  <!-- Conteúdo Principal -->
+  <main class="ml-64 flex-1 overflow-y-auto">
+    <!-- Header -->
+    <header class="flex justify-between items-center bg-[#222] px-8 py-4 sticky top-0 shadow-md z-10 border-b border-gray-700">
+      <h2 class="text-2xl font-bold">📊 Relatório de Evolução 2025 – HDL Contabilidade</h2>
+      <button onclick="window.print()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg font-semibold shadow">Exportar</button>
+    </header>
+
+    <section class="p-8 space-y-12">
+      <!-- Resumo Geral -->
+      <div id="resumo" class="space-y-6">
+        <h3 class="text-3xl font-bold text-yellow-400 flex items-center"><i data-lucide="book-open" class="mr-2"></i>Resumo Geral</h3>
+        <div class="bg-gradient-to-r from-yellow-500/20 via-gray-800 to-yellow-500/20 p-6 rounded-2xl shadow-lg border border-yellow-500/30">
+          <p class="text-lg leading-relaxed text-gray-100">
+            Durante o ano de 2025, a HDL Contabilidade avançou significativamente em sistemas internos e na modernização dos processos. 
+            Foram configurados setores no Tareffa, automatizado o atendimento no DigiSac, implantada a Telefonia IP e desenvolvido do zero um sistema de agendamento robusto. 
+            Também foi iniciado o plano de marketing do Vector, com foco em expansão digital. 
+            Os resultados já mostram ganhos de eficiência, organização e maior satisfação dos clientes internos e externos.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tareffa -->
+      <div id="tareffa" class="space-y-6">
+        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="check-circle" class="mr-2"></i>Tareffa</h3>
+        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
+          <p class="font-semibold text-gray-100">Resumo: Configuração de setores fiscais, pessoais, financeiros, legalização e contábeis.</p>
+          <p class="text-gray-300 mt-2">Pendências nos regimes tributários e ajustes de processos contábeis, mas já com dashboards ativos para acompanhamento.</p>
+          <div class="mt-4">
+            <div class="w-full bg-gray-700 rounded-full h-3">
+              <div class="bg-yellow-400 h-3 rounded-full" style="width: 70%"></div>
+            </div>
+            <p class="text-sm mt-1">Progresso: 70%</p>
+          </div>
+        </div>
+        <canvas id="chartTareffa" class="w-full h-64"></canvas>
+      </div>
+
+      <!-- DigiSac -->
+      <div id="digisac" class="space-y-6">
+        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="message-circle" class="mr-2"></i>DigiSac</h3>
+        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
+          <p class="font-semibold text-gray-100">Resumo: Automação de atendimento e organização de contatos por tags e setores.</p>
+          <p class="text-gray-300 mt-2">Sistema com robô de triagem inteligente, garantindo agilidade no atendimento e melhor experiência ao cliente.</p>
+          <div class="mt-4">
+            <div class="w-full bg-gray-700 rounded-full h-3">
+              <div class="bg-yellow-400 h-3 rounded-full" style="width: 85%"></div>
+            </div>
+            <p class="text-sm mt-1">Progresso: 85%</p>
+          </div>
+        </div>
+        <canvas id="chartDigiSac" class="w-full h-64"></canvas>
+      </div>
+
+      <!-- Telefonia IP -->
+      <div id="telefonia" class="space-y-6">
+        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="phone" class="mr-2"></i>Telefonia IP</h3>
+        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
+          <p class="font-semibold text-gray-100">Resumo: Introdução da telefonia IP com suporte técnico e treinamento inicial.</p>
+          <p class="text-gray-300 mt-2">Configuração em todos os computadores, melhorias em andamento com integração ao servidor central.</p>
+          <div class="mt-4">
+            <div class="w-full bg-gray-700 rounded-full h-3">
+              <div class="bg-yellow-400 h-3 rounded-full" style="width: 50%"></div>
+            </div>
+            <p class="text-sm mt-1">Progresso: 50%</p>
+          </div>
+        </div>
+        <canvas id="chartTelefonia" class="w-full h-64"></canvas>
+      </div>
+
+      <!-- Sistema de Agendamento -->
+      <div id="agendamento" class="space-y-6">
+        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="calendar" class="mr-2"></i>Sistema de Agendamento</h3>
+        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
+          <p class="font-semibold text-gray-100">Resumo: Sistema desenvolvido para eliminar conflitos e gerar relatórios.</p>
+          <p class="text-gray-300 mt-2">Com interface moderna, autenticação JWT e exportações, trouxe organização e clareza para reuniões.</p>
+          <div class="mt-4">
+            <div class="w-full bg-gray-700 rounded-full h-3">
+              <div class="bg-yellow-400 h-3 rounded-full" style="width: 90%"></div>
+            </div>
+            <p class="text-sm mt-1">Progresso: 90%</p>
+          </div>
+        </div>
+        <canvas id="chartAgendamento" class="w-full h-64"></canvas>
+      </div>
+
+      <!-- Vector -->
+      <div id="vector" class="space-y-6">
+        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="trending-up" class="mr-2"></i>Vector</h3>
+        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
+          <p class="font-semibold text-gray-100">Resumo: Plano de marketing em construção com foco em redes sociais e novos nichos.</p>
+          <p class="text-gray-300 mt-2">Voltado ao setor de ferro-velho e crescimento digital, ainda em fase inicial de desenvolvimento.</p>
+          <div class="mt-4">
+            <div class="w-full bg-gray-700 rounded-full h-3">
+              <div class="bg-yellow-400 h-3 rounded-full" style="width: 40%"></div>
+            </div>
+            <p class="text-sm mt-1">Progresso: 40%</p>
+          </div>
+        </div>
+        <canvas id="chartVector" class="w-full h-64"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // Função para inicializar gráficos
+    function initChart(id, label, data, color) {
+      new Chart(document.getElementById(id), {
+        type: 'line',
+        data: {
+          labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
+          datasets: [{
+            label: label,
+            data: data,
+            borderColor: color,
+            backgroundColor: color + "33",
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: { 
+          responsive: true, 
+          plugins: { legend: { labels: { color: "#fff" }}}, 
+          scales: { 
+            x: { ticks: { color: "#aaa"} }, 
+            y: { ticks: { color: "#aaa"}} 
+          }
+        }
+      });
+    }
+
+    initChart("chartTareffa", "Tareffa", [40, 55, 60, 65, 70, 70], "#facc15");
+    initChart("chartDigiSac", "DigiSac", [60, 70, 75, 80, 85, 85], "#facc15");
+    initChart("chartTelefonia", "Telefonia", [20, 30, 40, 45, 50, 50], "#facc15");
+    initChart("chartAgendamento", "Agendamento", [60, 70, 80, 85, 90, 90], "#facc15");
+    initChart("chartVector", "Vector", [10, 15, 20, 25, 40, 40], "#facc15");
+  </script>
+</body>
+</html>
+>>>>>>> 0ae1598759c82e34caa7c805fb50f07348266e61
