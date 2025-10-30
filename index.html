@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Relatório HDL — Evolução 2025 (Final)</title>
+
+  <!-- Tailwind CDN (play) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS (Animate on Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- ApexCharts -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <!-- Lucide icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- html2pdf for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root{
+      --gold-700:#b45309;
+      --gold-500:#facc15;
+      --bg-dark:#0f1724;
+      --muted:#94a3b8;
+    }
+
+    html,body { height:100%; }
+    body { background: linear-gradient(180deg,#060606,#0b1220); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; color:#e6eef8; }
+
+    /* Printable sheet (white A4) inside app */
+    .report-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 16mm auto;
+      padding: 20mm;
+      border-radius: 10px;
+      background: linear-gradient(180deg,#ffffff,#fbfaf8);
+      color:#0b1220;
+      box-shadow: 0 20px 60px rgba(2,6,23,0.6);
+      overflow: hidden;
+    }
+
+    .brand-badge {
+      width:56px;height:56px;border-radius:10px;
+      background: linear-gradient(135deg,var(--gold-500),#f59e0b);
+      display:flex;align-items:center;justify-content:center;font-weight:800;color:#081017;
+      box-shadow: 0 8px 24px rgba(250,204,21,0.12);
+    }
+
+    .ui-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
+      transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
+    }
+    .ui-card:hover { transform: translateY(-6px) scale(1.005); box-shadow: 0 12px 30px rgba(2,6,23,0.45); }
+
+    /* small print adjustments */
+    @media print {
+      body * { visibility: hidden; }
+      .report-sheet, .report-sheet * { visibility: visible; }
+      .report-sheet { position: absolute; left: 0; top: 0; }
+    }
+
+    .accent-line { height:4px; width:72px; border-radius:8px; background: linear-gradient(90deg,var(--gold-500),var(--gold-700)); box-shadow: 0 6px 18px rgba(250,204,21,0.12); }
+
+    .chart-area { height: 260px; }
+
+    /* small responsive tweaks */
+    @media (max-width: 1024px) {
+      .report-sheet { margin: 8mm 6mm; padding: 12mm; width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="flex min-h-screen">
+    <!-- Sidebar (dark UI) -->
+    <aside class="w-72 p-6 hidden lg:block">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-12 h-12 rounded-md bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-black font-bold">HDL</div>
+        <div>
+          <div class="text-yellow-400 font-bold">HDL Contabilidade</div>
+          <div class="text-xs text-gray-400">Relatório Executivo 2025</div>
+        </div>
+      </div>
+
+      <nav class="space-y-3 text-gray-300 text-sm mb-6">
+        <a href="#resumo" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="book-open"></i> Resumo</a>
+        <a href="#tareffa" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="check-circle"></i> Tareffa</a>
+        <a href="#rh" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="users"></i> RH (Quark)</a>
+        <a href="#digisac" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="message-circle-off"></i> DigiSac</a>
+        <a href="#telefonia" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="phone"></i> Telefonia IP</a>
+        <a href="#agendamento" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="calendar"></i> Agendamento</a>
+        <a href="#vector" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="trending-up"></i> Vector / PDV</a>
+        <a href="#team" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="users"></i> Equipe</a>
+      </nav>
+
+      <button id="btnExportApp" class="w-full mt-6 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-md font-semibold shadow">Exportar PDF</button>
+
+      <p class="mt-4 text-xs text-gray-400">Atalho: <strong>Ctrl/Cmd + E</strong> para exportar.</p>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6 lg:p-12">
+      <!-- REPORT SHEET -->
+      <article id="report" class="report-sheet" data-aos="fade-up" data-aos-duration="800">
+        <!-- Header -->
+        <header class="flex items-start justify-between">
+          <div style="display:flex; gap:14px; align-items:center;">
+            <div class="brand-badge">HDL</div>
+            <div>
+              <div style="font-size:18px;font-weight:800;color:var(--gold-700);">Relatório de Evolução 2025 — HDL Contabilidade</div>
+              <div style="font-size:12px;color:#475569;margin-top:4px;">Síntese executiva de projetos, automações e adoção interna</div>
+            </div>
+          </div>
+
+          <div style="text-align:right;">
+            <div style="font-size:12px;color:#475569;">Emitido em: <strong id="emitDateTop"></strong></div>
+            <div style="font-size:12px;color:#475569;margin-top:6px;">Responsável: <strong>Nicolas</strong></div>
+          </div>
+        </header>
+
+        <div style="margin-top:14px; margin-bottom:18px;" class="flex items-center justify-between">
+          <div class="accent-line"></div>
+          <div style="font-size:12px;color:#64748b;">Relatório corporativo — visual fluido, empresarial e pronto para impressão</div>
+        </div>
+
+        <!-- ===========================
+             Executive Summary (original content merged)
+             =========================== -->
+        <section id="resumo" data-aos="fade-right" data-aos-duration="700">
+          <h2 style="font-size:15px;color:var(--gold-700);font-weight:700;margin-bottom:8px;">Resumo Geral</h2>
+          <p style="color:#334155;line-height:1.6;">
+            Durante o ano de 2025, a HDL Contabilidade avançou significativamente em sistemas internos e na modernização dos processos. 
+            Foram configurados setores no <strong>Tareffa</strong>, automatizado o atendimento no <strong>DigiSac</strong>, implantada a <strong>Telefonia IP</strong> e desenvolvido do zero um sistema de <strong>agendamento</strong> robusto. 
+            Também foi iniciado o plano de marketing do <strong>Vector</strong>, com foco em expansão digital. 
+            Os resultados já mostram ganhos de eficiência, organização e maior satisfação dos clientes internos e externos.
+          </p>
+
+          <p style="color:#334155;line-height:1.6;margin-top:8px;">
+            Atualizações importantes: a <strong>Legalização</strong> e a <strong>Contabilidade</strong> estão implementadas; o <strong>RH (Quark)</strong> está em fase inicial de importação de dados para integração; 
+            o <strong>DigiSac</strong> foi estabilizado e será descontinuado gradualmente, com migração dos chamados para o <strong>Tareffa Comunicação</strong>.
+            O sistema de agendamento passou por uma atualização de filtros e UX — o escritório inteiro já está utilizando. No projeto <strong>Vector</strong>, atuo como Product Owner do PDV em parceria com Fabricio e Sirlovani, com suporte ao Henrique quando necessário.
+          </p>
+        </section>
+
+        <!-- KPI Cards (mix of first and later values) -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6" data-aos="fade-up" data-aos-duration="700">
+          <div class="ui-card p-4 rounded-lg">
+            <div class="text-xs text-gray-500">Legalização</div>
+            <div class="text-xl font-bold mt-2">100%</div>
+            <div class="text-sm text-gray-500 mt-1">Processos implementados</div>
+          </div>
+
+          <div class="ui-card p-4 rounded-lg">
+            <div class="text-xs text-gray-500">Contabilidade</div>
+            <div class="text-xl font-bold mt-2">100%</div>
+            <div class="text-sm text-gray-500 mt-1">Dashboards e fluxos atualizados</div>
+          </div>
+
+          <div class="ui-card p-4 rounded-lg">
+            <div class="text-xs text-gray-500">RH (Quark)</div>
+            <div class="text-xl font-bold mt-2">30%</div>
+            <div class="text-sm text-gray-500 mt-1">Importação de dados em andamento</div>
+          </div>
+
+          <div class="ui-card p-4 rounded-lg">
+            <div class="text-xs text-gray-500">DigiSac</div>
+            <div class="text-xl font-bold mt-2">100%</div>
+            <div class="text-sm text-gray-500 mt-1">Estabilizado — em descontinuação</div>
+          </div>
+        </section>
+
+        <!-- Charts row (mixed + donut) -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" id="charts" data-aos="zoom-in" data-aos-duration="700">
+          <div class="ui-card p-4 rounded-lg">
+            <div class="flex items-center justify-between mb-3">
+              <div><strong>Evolução dos Projetos</strong><div class="text-sm text-gray-500">Progresso (Mai → Out) / Satisfação</div></div>
+              <div class="text-xs text-gray-400">Últimos 6 meses</div>
+            </div>
+            <div id="chartMixed" class="chart-area"></div>
+          </div>
+
+          <div class="ui-card p-4 rounded-lg">
+            <div class="flex items-center justify-between mb-3">
+              <div><strong>Distribuição por Setor</strong><div class="text-sm text-gray-500">Progresso atual (%)</div></div>
+              <div class="text-xs text-gray-400">Snapshot</div>
+            </div>
+            <div id="chartDonut" class="chart-area"></div>
+          </div>
+        </section>
+
+        <!-- Telefonia + Agendamento + Vector small cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6" data-aos="fade-up" data-aos-duration="700">
+          <div class="p-4 bg-white rounded-lg border">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-bold">Telefonia IP</div>
+                <div class="text-sm text-gray-500 mt-1">Introdução com suporte técnico e treinamento. Integração em andamento.</div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold">50%</div>
+                <div class="text-sm text-gray-400">Configuração parcial</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 bg-white rounded-lg border">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-bold">Agendamento</div>
+                <div class="text-sm text-gray-500 mt-1">Sistema atualizado para evitar conflitos, filtros melhorados. Uso por todo o escritório.</div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold">95%</div>
+                <div class="text-sm text-gray-400">Implementado</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 bg-white rounded-lg border">
+            <div class="flex justify-between">
+              <div>
+                <div class="font-bold">Vector / PDV</div>
+                <div class="text-sm text-gray-500 mt-1">Plano de marketing ativo; PDV em desenvolvimento. Você atua como P.O.</div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold">85%</div>
+                <div class="text-sm text-gray-400">Em execução</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Radar + Horizontal Bar for printed report -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" data-aos="fade-up" data-aos-duration="700">
+          <div class="ui-card p-4 rounded-lg">
+            <div class="flex items-center justify-between mb-3">
+              <div><strong>Indicadores Operacionais</strong><div class="text-sm text-gray-500">Adoção • Automação • Readiness • Risco • Suporte</div></div>
+              <div class="text-xs text-gray-400">Visão rápida</div>
+            </div>
+            <div id="chartRadar" class="chart-area"></div>
+          </div>
+
+          <div class="ui-card p-4 rounded-lg">
+            <div class="flex items-center justify-between mb-3">
+              <div><strong>Carga & Prioridade (por setor)</strong><div class="text-sm text-gray-500">Volume e prioridade</div></div>
+              <div class="text-xs text-gray-400">Para impressão</div>
+            </div>
+            <div id="chartBar" class="chart-area"></div>
+          </div>
+        </section>
+
+        <!-- Detailed Sector blocks (original text improved) -->
+        <section id="setores" class="mt-6" data-aos="fade-right" data-aos-duration="700">
+          <h3 style="color:var(--gold-700);font-weight:700;margin-bottom:8px;">Resumo por Setor</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- Legalização -->
+            <div class="p-4 bg-white rounded-lg border">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold">Legalização</div>
+                  <div class="text-sm text-gray-500 mt-1">Processos e rotinas de legalização implementados. Monitoramento contínuo e indicadores para compliance.</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold">100%</div>
+                  <div class="text-sm text-gray-400">Concluído</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contabilidade -->
+            <div class="p-4 bg-white rounded-lg border">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold">Contabilidade</div>
+                  <div class="text-sm text-gray-500 mt-1">Fluxo contábil atualizado, dashboards com KPIs e redução de retrabalho.</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold">100%</div>
+                  <div class="text-sm text-gray-400">Concluído</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RH Quark -->
+            <div class="p-4 bg-white rounded-lg border">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold">RH — Quark</div>
+                  <div class="text-sm text-gray-500 mt-1">Sistema RH em fase inicial: padronização de campos, importação e validações de duplicidade em andamento.</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold">30%</div>
+                  <div class="text-sm text-gray-400">Em progresso</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DigiSac -->
+            <div class="p-4 bg-white rounded-lg border">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold">DigiSac</div>
+                  <div class="text-sm text-gray-500 mt-1">Robô de triagem e automação de atendimento estabilizados. Baixa reclamação dos clientes — processo de descontinuação iniciado para migração ao Tareffa Comunicação.</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold">100%</div>
+                  <div class="text-sm text-gray-400">Concluído / Em descontinuação</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agendamento -->
+            <div class="p-4 bg-white rounded-lg border">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold">Sistema de Agendamento</div>
+                  <div class="text-sm text-gray-500 mt-1">Desenvolvido para eliminar conflitos, com autenticação JWT, filtros avançados e exportações — implantação total no escritório.</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold">95%</div>
+                  <div class="text-sm text-gray-400">Em uso</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Telefonia IP -->
+            <div class="p-4 bg-white rounded-lg border">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold">Telefonia IP</div>
+                  <div class="text-sm text-gray-500 mt-1">Introdução com treinamentos iniciais; integração a melhorar e monitorar taxas de atendimento.</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold">50%</div>
+                  <div class="text-sm text-gray-400">Em andamento</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vector / PDV -->
+            <div class="p-4 bg-white rounded-lg border md:col-span-2">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-bold">Vector / PDV</div>
+                  <div class="text-sm text-gray-500 mt-1">Plano de marketing ativo, expansão digital e desenvolvimento do PDV. Você está atuando como Product Owner do PDV em parceria com Fabricio e Sirlovani; suporte pontual ao Henrique.</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-bold">85%</div>
+                  <div class="text-sm text-gray-400">Em execução</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Team (names only) -->
+        <section id="team" class="mt-6" data-aos="fade-up" data-aos-duration="700">
+          <h3 style="color:var(--gold-700);font-weight:700;margin-bottom:8px;">Equipe & Responsabilidades</h3>
+          <div class="flex flex-wrap gap-3">
+            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Nicolas — Product Owner / Coordenação e suporte</div>
+            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Fabricio — Front-end / Integrações PDV</div>
+            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Sirlovani — Back-end / Banco de dados</div>
+            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Henrique — Atendimento e validação em campo</div>
+          </div>
+        </section>
+
+        <!-- Observations / Next steps -->
+        <section class="mt-6" data-aos="fade-up" data-aos-duration="700">
+          <h4 style="font-weight:700;">Observações & Próximos passos</h4>
+          <ul style="color:#334155; margin-left:16px; margin-top:8px; line-height:1.6;">
+            <li>Planejar e executar migração final do DigiSac para o Tareffa Comunicação até Q1 2026.</li>
+            <li>Concluir importação do RH Quark com validações e deduplicação de registros.</li>
+            <li>Finalizar features do PDV, realizar testes com clientes piloto e organizar rollout controlado.</li>
+            <li>Aprimorar integrações da Telefonia IP ao servidor central e monitorar KPIs de atendimento.</li>
+          </ul>
+        </section>
+
+        <footer style="margin-top:18px; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#64748b;">
+          <div>HDL Contabilidade — Relatório Interno</div>
+          <div>Assinado: <strong>Nicolas Gonçalves</strong> — Emitido em <span id="emitDateFooter"></span></div>
+        </footer>
+      </article>
+    </main>
+  </div>
+
+  <!-- Initialize icons & AOS -->
+  <script>
+    lucide.createIcons();
+    AOS.init({ once:true, duration:700 });
+    const dateStr = (new Date()).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+    document.getElementById('emitDateTop').innerText = dateStr;
+    document.getElementById('emitDateFooter').innerText = dateStr;
+  </script>
+
+  <!-- ApexCharts: Mixed, Donut, Radar, Bar -->
+  <script>
+    // Mixed chart (bar + line)
+    const mixedOptions = {
+      chart: { type: 'line', height: 260, toolbar: { show:false }, animations: { enabled:true, easing: 'easeout', speed: 700 }},
+      series: [
+        { name: 'Progresso (%)', type: 'column', data: [40,55,60,65,70,90] }, // merged from original and updated
+        { name: 'Satisfação (índice)', type: 'line', data: [60,70,75,80,85,85] }
+      ],
+      stroke: { width: [0,3] },
+      plotOptions: { bar: { columnWidth: '48%', borderRadius: 6 }},
+      colors: ['#facc15','#0f172a'],
+      xaxis: { categories: ['Mai','Jun','Jul','Ago','Set','Out'] },
+      yaxis: [{ title: { text: 'Progresso (%)' }, min:0, max:100 }, { opposite: true, min:0, max:100, title: { text: 'Satisfação' }}],
+      legend: { horizontalAlign:'left' },
+      tooltip: { shared:true, intersect:false }
+    };
+    new ApexCharts(document.querySelector("#chartMixed"), mixedOptions).render();
+
+    // Donut / distribution
+    const donutOptions = {
+      chart: { type: 'donut', height: 260 },
+      series: [100,100,30,95,85],
+      labels: ['Legalização','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'],
+      colors: ['#f59e0b','#facc15','#60a5fa','#34d399','#f97316'],
+      legend: { position:'bottom' },
+      tooltip: { y: { formatter: val => val + '%' } }
+    };
+    new ApexCharts(document.querySelector("#chartDonut"), donutOptions).render();
+
+    // Radar
+    const radarOptions = {
+      chart: { type: 'radar', height: 260 },
+      series: [{ name: 'Indicadores', data: [85,75,70,25,80] }],
+      labels: ['Adoção','Automação','Readiness','Risco','Suporte'],
+      colors: ['#ef4444'],
+      yaxis: { min:0, max:100 }
+    };
+    new ApexCharts(document.querySelector("#chartRadar"), radarOptions).render();
+
+    // Horizontal Bar (for printed summary)
+    const barOptions = {
+      chart: { type: 'bar', height: 260 },
+      series: [{ name: 'Progresso', data: [100,100,30,95,85] }],
+      colors: ['#facc15'],
+      plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 6 }},
+      xaxis: { categories: ['Legalização','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'], max:100 },
+      tooltip: { y: { formatter: val => val + '%' } }
+    };
+    new ApexCharts(document.querySelector("#chartBar"), barOptions).render();
+  </script>
+
+  <!-- PDF Export logic (preserve styling, use clone) -->
+  <script>
+    function exportReportToPDF(triggerBtn) {
+      const element = document.getElementById('report');
+      // clone and prepare
+      const clone = element.cloneNode(true);
+      clone.style.boxShadow = 'none';
+      clone.style.margin = '0';
+      clone.style.width = '210mm'; // A4 width
+      clone.style.minHeight = '297mm';
+      // remove AOS attributes to prevent weird inline styles
+      clone.querySelectorAll('[data-aos]').forEach(n => n.removeAttribute('data-aos'));
+
+      // Ensure charts are visible in clone: re-render charts into clone by serializing canvas images
+      // Convert each ApexCharts container to image in clone (approximation): use existing chart SVGs if present.
+      // For reliability, we let html2canvas capture current DOM with scale 2.
+
+      // append clone hidden
+      const container = document.createElement('div');
+      container.style.position = 'fixed';
+      container.style.left = '-9999px';
+      container.appendChild(clone);
+      document.body.appendChild(container);
+
+      const filename = `Relatorio-HDL-2025_${(new Date()).toISOString().slice(0,10)}.pdf`;
+      const opt = {
+        margin:       [10,10,10,10],
+        filename:     filename,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      // disable button while generating
+      if (triggerBtn) { triggerBtn.disabled = true; triggerBtn.innerText = 'Gerando PDF...'; }
+
+      // Use html2pdf to save
+      html2pdf().set(opt).from(clone).save()
+        .then(() => {
+          document.body.removeChild(container);
+        })
+        .catch(err => {
+          console.error('Erro export:', err);
+          document.body.removeChild(container);
+          alert('Erro ao gerar PDF. Veja console.');
+        })
+        .finally(() => {
+          if (triggerBtn) { setTimeout(()=>{ triggerBtn.disabled=false; triggerBtn.innerText='Exportar PDF'; }, 1200); }
+        });
+    }
+
+    // hook button
+    document.getElementById('btnExportApp').addEventListener('click', function(){ exportReportToPDF(this); });
+
+    // keyboard shortcut: Ctrl+E to export
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        const btn = document.getElementById('btnExportApp');
+        exportReportToPDF(btn);
+      }
+    });
+  </script>
+</body>
+</html>
