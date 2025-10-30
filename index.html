@@ -1,382 +1,349 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR" class="dark" style="scroll-behavior: smooth;">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Relatório HDL — Evolução 2025 (Final)</title>
 
-  <!-- Tailwind CDN (play) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- AOS (Animate on Scroll) -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-  <!-- ApexCharts -->
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
-  <!-- Lucide icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- html2pdf for PDF export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              400: '#facc15', // Tom mais claro para highlights
+              500: '#f59e0b', // Tom médio/principal
+              700: '#b45309', // Tom escuro
+            },
+            'bg-dark': '#0f1724', // Fundo principal
+            'bg-dark-soft': '#1a2436', // Fundo de cards
+            'muted': '#94a3b8',   // Texto secundário (cinza-azulado)
+          },
+          fontFamily: {
+            'inter': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial'],
+          },
+          spacing: {
+            '3.5': '14px',
+          },
+          borderRadius: {
+            'card': '10px',
+          }
+        }
+      }
+    }
+  </script>
+  
   <style>
-    :root{
-      --gold-700:#b45309;
-      --gold-500:#facc15;
-      --bg-dark:#0f1724;
-      --muted:#94a3b8;
-    }
-
+    /* MELHORIA GERAL:
+      - Removido o estilo .report-sheet (página branca).
+      - O body agora é o fundo principal.
+      - Criado um .ui-card coeso para TODOS os elementos.
+    */
     html,body { height:100%; }
-    body { background: linear-gradient(180deg,#060606,#0b1220); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; color:#e6eef8; }
-
-    /* Printable sheet (white A4) inside app */
-    .report-sheet {
-      width: 210mm;
-      min-height: 297mm;
-      margin: 16mm auto;
-      padding: 20mm;
-      border-radius: 10px;
-      background: linear-gradient(180deg,#ffffff,#fbfaf8);
-      color:#0b1220;
-      box-shadow: 0 20px 60px rgba(2,6,23,0.6);
-      overflow: hidden;
+    body { 
+      background: linear-gradient(180deg, #060606, #0b1220); 
+      font-family: 'Inter', ui-sans-serif, system-ui; 
+      -webkit-font-smoothing: antialiased; 
+      color: #e6eef8; /* Cor de texto base */
     }
 
-    .brand-badge {
-      width:56px;height:56px;border-radius:10px;
-      background: linear-gradient(135deg,var(--gold-500),#f59e0b);
-      display:flex;align-items:center;justify-content:center;font-weight:800;color:#081017;
-      box-shadow: 0 8px 24px rgba(250,204,21,0.12);
-    }
-
+    /* Card Padrão (Dark Mode) */
     .ui-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.04);
-      backdrop-filter: blur(6px);
-      transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
+      /* Fundo com gradiente sutil e borda para "glassmorphism" */
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.4), rgba(30, 41, 59, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(8px);
+      transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s, border-color .28s;
     }
-    .ui-card:hover { transform: translateY(-6px) scale(1.005); box-shadow: 0 12px 30px rgba(2,6,23,0.45); }
-
-    /* small print adjustments */
-    @media print {
-      body * { visibility: hidden; }
-      .report-sheet, .report-sheet * { visibility: visible; }
-      .report-sheet { position: absolute; left: 0; top: 0; }
+    .ui-card:hover { 
+      transform: translateY(-6px) scale(1.005); 
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.45); 
+      border-color: rgba(250, 204, 21, 0.2); /* Borda dourada sutil no hover */
     }
 
-    .accent-line { height:4px; width:72px; border-radius:8px; background: linear-gradient(90deg,var(--gold-500),var(--gold-700)); box-shadow: 0 6px 18px rgba(250,204,21,0.12); }
+    /* Logo "HDL" */
+    .brand-badge {
+      width: 56px; height: 56px; border-radius: 10px;
+      background: linear-gradient(135deg, #facc15, #f59e0b);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #081017;
+      box-shadow: 0 8px 24px rgba(250, 204, 21, 0.12);
+      flex-shrink: 0;
+    }
+
+    /* Linha de destaque dourada */
+    .accent-line { 
+      height: 4px; width: 72px; border-radius: 8px; 
+      background: linear-gradient(90deg, #facc15, #b45309);
+      box-shadow: 0 6px 18px rgba(250, 204, 21, 0.12); 
+    }
 
     .chart-area { height: 260px; }
 
-    /* small responsive tweaks */
-    @media (max-width: 1024px) {
-      .report-sheet { margin: 8mm 6mm; padding: 12mm; width: auto; }
+    /* Ajustes de impressão (Mantido para o PDF) */
+    @media print {
+      body { background: #ffffff; color: #000; }
+      .ui-card { background: #f9fafb; border: 1px solid #e5e7eb; box-shadow: none; }
+      /* ... (mais estilos de impressão seriam necessários para um print perfeito) */
     }
   </style>
 </head>
-<body>
+<body class="font-inter">
+  
   <div class="flex min-h-screen">
-    <!-- Sidebar (dark UI) -->
-    <aside class="w-72 p-6 hidden lg:block">
+    <aside class="w-72 p-6 hidden lg:block flex-shrink-0">
       <div class="flex items-center gap-3 mb-8">
-        <div class="w-12 h-12 rounded-md bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-black font-bold">HDL</div>
+        <div class="w-12 h-12 rounded-md bg-gradient-to-br from-gold-400 to-gold-500 flex items-center justify-center text-black font-bold">HDL</div>
         <div>
-          <div class="text-yellow-400 font-bold">HDL Contabilidade</div>
+          <div class="text-gold-400 font-bold">HDL Contabilidade</div>
           <div class="text-xs text-gray-400">Relatório Executivo 2025</div>
         </div>
       </div>
 
-      <nav class="space-y-3 text-gray-300 text-sm mb-6">
-        <a href="#resumo" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="book-open"></i> Resumo</a>
-        <a href="#tareffa" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="check-circle"></i> Tareffa</a>
-        <a href="#rh" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="users"></i> RH (Quark)</a>
-        <a href="#digisac" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="message-circle-off"></i> DigiSac</a>
-        <a href="#telefonia" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="phone"></i> Telefonia IP</a>
-        <a href="#agendamento" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="calendar"></i> Agendamento</a>
-        <a href="#vector" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="trending-up"></i> Vector / PDV</a>
-        <a href="#team" class="flex items-center gap-3 hover:text-yellow-400"><i data-lucide="users"></i> Equipe</a>
+      <nav role="navigation" class="space-y-3 text-gray-300 text-sm mb-6">
+        <a href="#resumo" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="book-open"></i> Resumo</a>
+        <a href="#kpis" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="bar-chart-3"></i> KPIs</a>
+        <a href="#charts" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="pie-chart"></i> Gráficos</a>
+        <a href="#setores" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="briefcase"></i> Detalhes por Setor</a>
+        <a href="#team" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="users"></i> Equipe</a>
       </nav>
 
-      <button id="btnExportApp" class="w-full mt-6 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-md font-semibold shadow">Exportar PDF</button>
+      <button id="btnExportApp" class="w-full mt-6 px-4 py-2 bg-gold-500 hover:bg-gold-700 text-black rounded-md font-semibold shadow transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-bg-dark">Exportar PDF</button>
 
       <p class="mt-4 text-xs text-gray-400">Atalho: <strong>Ctrl/Cmd + E</strong> para exportar.</p>
     </aside>
 
-    <!-- Main content -->
     <main class="flex-1 p-6 lg:p-12">
-      <!-- REPORT SHEET -->
-      <article id="report" class="report-sheet" data-aos="fade-up" data-aos-duration="800">
-        <!-- Header -->
-        <header class="flex items-start justify-between">
-          <div style="display:flex; gap:14px; align-items:center;">
+      <article role="article" id="report-content" class="max-w-7xl mx-auto" data-aos="fade-up" data-aos-duration="800">
+        
+        <header class="flex flex-col sm:flex-row items-start justify-between gap-4">
+          <div class="flex items-center gap-3.5">
             <div class="brand-badge">HDL</div>
             <div>
-              <div style="font-size:18px;font-weight:800;color:var(--gold-700);">Relatório de Evolução 2025 — HDL Contabilidade</div>
-              <div style="font-size:12px;color:#475569;margin-top:4px;">Síntese executiva de projetos, automações e adoção interna</div>
+              <h1 class="text-2xl font-extrabold text-gold-400">Relatório de Evolução 2025</h1>
+              <p class="text-base text-muted mt-1">HDL Contabilidade — Síntese executiva de projetos e automações.</p>
             </div>
           </div>
 
-          <div style="text-align:right;">
-            <div style="font-size:12px;color:#475569;">Emitido em: <strong id="emitDateTop"></strong></div>
-            <div style="font-size:12px;color:#475569;margin-top:6px;">Responsável: <strong>Nicolas</strong></div>
+          <div class="text-sm text-muted sm:text-right w-full sm:w-auto flex-shrink-0">
+            <div>Emitido em: <strong id="emitDateTop" class="text-gray-100"></strong></div>
+            <div class="mt-1.5">Responsável: <strong class="text-gray-100">Nicolas</strong></div>
           </div>
         </header>
 
-        <div style="margin-top:14px; margin-bottom:18px;" class="flex items-center justify-between">
+        <div class="flex items-center justify-between mt-6 mb-6">
           <div class="accent-line"></div>
-          <div style="font-size:12px;color:#64748b;">Relatório corporativo — visual fluido, empresarial e pronto para impressão</div>
+          <div class="text-xs text-muted">Relatório executivo — Dark Mode</div>
         </div>
 
-        <!-- ===========================
-             Executive Summary (original content merged)
-             =========================== -->
-        <section id="resumo" data-aos="fade-right" data-aos-duration="700">
-          <h2 style="font-size:15px;color:var(--gold-700);font-weight:700;margin-bottom:8px;">Resumo Geral</h2>
-          <p style="color:#334155;line-height:1.6;">
-            Durante o ano de 2025, a HDL Contabilidade avançou significativamente em sistemas internos e na modernização dos processos. 
-            Foram configurados setores no <strong>Tareffa</strong>, automatizado o atendimento no <strong>DigiSac</strong>, implantada a <strong>Telefonia IP</strong> e desenvolvido do zero um sistema de <strong>agendamento</strong> robusto. 
-            Também foi iniciado o plano de marketing do <strong>Vector</strong>, com foco em expansão digital. 
-            Os resultados já mostram ganhos de eficiência, organização e maior satisfação dos clientes internos e externos.
-          </p>
-
-          <p style="color:#334155;line-height:1.6;margin-top:8px;">
-            Atualizações importantes: a <strong>Legalização</strong> e a <strong>Contabilidade</strong> estão implementadas; o <strong>RH (Quark)</strong> está em fase inicial de importação de dados para integração; 
-            o <strong>DigiSac</strong> foi estabilizado e será descontinuado gradualmente, com migração dos chamados para o <strong>Tareffa Comunicação</strong>.
-            O sistema de agendamento passou por uma atualização de filtros e UX — o escritório inteiro já está utilizando. No projeto <strong>Vector</strong>, atuo como Product Owner do PDV em parceria com Fabricio e Sirlovani, com suporte ao Henrique quando necessário.
-          </p>
-        </section>
-
-        <!-- KPI Cards (mix of first and later values) -->
-        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6" data-aos="fade-up" data-aos-duration="700">
-          <div class="ui-card p-4 rounded-lg">
-            <div class="text-xs text-gray-500">Legalização</div>
-            <div class="text-xl font-bold mt-2">100%</div>
-            <div class="text-sm text-gray-500 mt-1">Processos implementados</div>
-          </div>
-
-          <div class="ui-card p-4 rounded-lg">
-            <div class="text-xs text-gray-500">Contabilidade</div>
-            <div class="text-xl font-bold mt-2">100%</div>
-            <div class="text-sm text-gray-500 mt-1">Dashboards e fluxos atualizados</div>
-          </div>
-
-          <div class="ui-card p-4 rounded-lg">
-            <div class="text-xs text-gray-500">RH (Quark)</div>
-            <div class="text-xl font-bold mt-2">30%</div>
-            <div class="text-sm text-gray-500 mt-1">Importação de dados em andamento</div>
-          </div>
-
-          <div class="ui-card p-4 rounded-lg">
-            <div class="text-xs text-gray-500">DigiSac</div>
-            <div class="text-xl font-bold mt-2">100%</div>
-            <div class="text-sm text-gray-500 mt-1">Estabilizado — em descontinuação</div>
+        <section id="resumo" aria-labelledby="resumo-heading" data-aos="fade-right" data-aos-duration="700">
+          <h2 id="resumo-heading" class="text-xl font-bold text-gold-400 mb-3">Resumo Geral</h2>
+          <div class="space-y-3 text-gray-300" style="line-height: 1.6;">
+            <p>
+              Durante o ano de 2025, a HDL Contabilidade avançou significativamente em sistemas internos e na modernização dos processos. 
+              Foram configurados setores no <strong>Tareffa</strong>, automatizado o atendimento no <strong>DigiSac</strong>, implantada a <strong>Telefonia IP</strong> e desenvolvido do zero um sistema de <strong>agendamento</strong> robusto. 
+              Também foi iniciado o plano de marketing do <strong>Vector</strong>, com foco em expansão digital. 
+              Os resultados já mostram ganhos de eficiência, organização e maior satisfação dos clientes internos e externos.
+            </p>
+            <p>
+              Atualizações importantes: a <strong>Legalização</strong> e a <strong>Contabilidade</strong> estão implementadas; o <strong>RH (Quark)</strong> está em fase inicial de importação de dados para integração; 
+              o <strong>DigiSac</strong> foi estabilizado e será descontinuado gradualmente, com migração dos chamados para o <strong>Tareffa Comunicação</strong>.
+              O sistema de agendamento passou por uma atualização de filtros e UX — o escritório inteiro já está utilizando. No projeto <strong>Vector</strong>, atuo como Product Owner do PDV em parceria com Fabricio e Sirlovani, com suporte ao Henrique quando necessário.
+            </p>
           </div>
         </section>
 
-        <!-- Charts row (mixed + donut) -->
+        <section id="kpis" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8" data-aos="fade-up" data-aos-duration="700">
+          <div class="ui-card p-4 rounded-card">
+            <div class="text-sm text-muted">Legalização</div>
+            <div class="text-2xl font-bold mt-2 text-white">100%</div>
+            <div class="text-sm text-muted mt-1">Processos implementados</div>
+          </div>
+
+          <div class="ui-card p-4 rounded-card">
+            <div class="text-sm text-muted">Contabilidade</div>
+            <div class="text-2xl font-bold mt-2 text-white">100%</div>
+            <div class="text-sm text-muted mt-1">Dashboards e fluxos</div>
+          </div>
+
+          <div class="ui-card p-4 rounded-card">
+            <div class="text-sm text-muted">RH (Quark)</div>
+            <div class="text-2xl font-bold mt-2 text-white">30%</div>
+            <div class="text-sm text-muted mt-1">Importação de dados</div>
+          </div>
+
+          <div class="ui-card p-4 rounded-card">
+            <div class="text-sm text-muted">DigiSac</div>
+            <div class="text-2xl font-bold mt-2 text-white">100%</div>
+            <div class="text-sm text-muted mt-1">Em descontinuação</div>
+          </div>
+        </section>
+
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" id="charts" data-aos="zoom-in" data-aos-duration="700">
-          <div class="ui-card p-4 rounded-lg">
+          <div class="ui-card text-white p-4 rounded-card">
             <div class="flex items-center justify-between mb-3">
-              <div><strong>Evolução dos Projetos</strong><div class="text-sm text-gray-500">Progresso (Mai → Out) / Satisfação</div></div>
-              <div class="text-xs text-gray-400">Últimos 6 meses</div>
+              <div><strong class="text-lg">Evolução dos Projetos</strong><div class="text-sm text-muted">Progresso (Mai → Out) / Satisfação</div></div>
+              <div class="text-xs text-muted">Últimos 6 meses</div>
             </div>
             <div id="chartMixed" class="chart-area"></div>
           </div>
 
-          <div class="ui-card p-4 rounded-lg">
+          <div class="ui-card text-white p-4 rounded-card">
             <div class="flex items-center justify-between mb-3">
-              <div><strong>Distribuição por Setor</strong><div class="text-sm text-gray-500">Progresso atual (%)</div></div>
-              <div class="text-xs text-gray-400">Snapshot</div>
+              <div><strong class="text-lg">Distribuição por Setor</strong><div class="text-sm text-muted">Progresso atual (%)</div></div>
+              <div class="text-xs text-muted">Snapshot</div>
             </div>
             <div id="chartDonut" class="chart-area"></div>
           </div>
         </section>
 
-        <!-- Telefonia + Agendamento + Vector small cards -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6" data-aos="fade-up" data-aos-duration="700">
-          <div class="p-4 bg-white rounded-lg border">
+          <div class="ui-card p-4 rounded-card">
             <div class="flex justify-between">
               <div>
-                <div class="font-bold">Telefonia IP</div>
-                <div class="text-sm text-gray-500 mt-1">Introdução com suporte técnico e treinamento. Integração em andamento.</div>
+                <div class="font-bold text-white">Telefonia IP</div>
+                <div class="text-sm text-muted mt-1">Introdução com suporte e treinamento. Integração em andamento.</div>
               </div>
               <div class="text-right">
-                <div class="font-bold">50%</div>
-                <div class="text-sm text-gray-400">Configuração parcial</div>
+                <div class="font-bold text-white">50%</div>
+                <div class="text-sm text-muted">Configuração</div>
               </div>
             </div>
           </div>
 
-          <div class="p-4 bg-white rounded-lg border">
+          <div class="ui-card p-4 rounded-card">
             <div class="flex justify-between">
               <div>
-                <div class="font-bold">Agendamento</div>
-                <div class="text-sm text-gray-500 mt-1">Sistema atualizado para evitar conflitos, filtros melhorados. Uso por todo o escritório.</div>
+                <div class="font-bold text-white">Agendamento</div>
+                <div class="text-sm text-muted mt-1">Sistema com filtros e UX atualizados. Uso por todo o escritório.</div>
               </div>
               <div class="text-right">
-                <div class="font-bold">95%</div>
-                <div class="text-sm text-gray-400">Implementado</div>
+                <div class="font-bold text-white">95%</div>
+                <div class="text-sm text-muted">Implementado</div>
               </div>
             </div>
           </div>
 
-          <div class="p-4 bg-white rounded-lg border">
+          <div class="ui-card p-4 rounded-card">
             <div class="flex justify-between">
               <div>
-                <div class="font-bold">Vector / PDV</div>
-                <div class="text-sm text-gray-500 mt-1">Plano de marketing ativo; PDV em desenvolvimento. Você atua como P.O.</div>
+                <div class="font-bold text-white">Vector / PDV</div>
+                <div class="text-sm text-muted mt-1">Plano de marketing ativo; PDV em desenvolvimento (atuação como P.O).</div>
               </div>
               <div class="text-right">
-                <div class="font-bold">85%</div>
-                <div class="text-sm text-gray-400">Em execução</div>
+                <div class="font-bold text-white">85%</div>
+                <div class="text-sm text-muted">Em execução</div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Radar + Horizontal Bar for printed report -->
         <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" data-aos="fade-up" data-aos-duration="700">
-          <div class="ui-card p-4 rounded-lg">
+          <div class="ui-card text-white p-4 rounded-card">
             <div class="flex items-center justify-between mb-3">
-              <div><strong>Indicadores Operacionais</strong><div class="text-sm text-gray-500">Adoção • Automação • Readiness • Risco • Suporte</div></div>
-              <div class="text-xs text-gray-400">Visão rápida</div>
+              <div><strong class="text-lg">Indicadores Operacionais</strong><div class="text-sm text-muted">Adoção • Automação • Readiness • Risco • Suporte</div></div>
+              <div class="text-xs text-muted">Visão rápida</div>
             </div>
             <div id="chartRadar" class="chart-area"></div>
           </div>
 
-          <div class="ui-card p-4 rounded-lg">
+          <div class="ui-card text-white p-4 rounded-card">
             <div class="flex items-center justify-between mb-3">
-              <div><strong>Carga & Prioridade (por setor)</strong><div class="text-sm text-gray-500">Volume e prioridade</div></div>
-              <div class="text-xs text-gray-400">Para impressão</div>
+              <div><strong class="text-lg">Progresso por Setor</strong><div class="text-sm text-muted">Status de implementação (%)</div></div>
+              <div class="text-xs text-muted">Para impressão</div>
             </div>
             <div id="chartBar" class="chart-area"></div>
           </div>
         </section>
 
-        <!-- Detailed Sector blocks (original text improved) -->
-        <section id="setores" class="mt-6" data-aos="fade-right" data-aos-duration="700">
-          <h3 style="color:var(--gold-700);font-weight:700;margin-bottom:8px;">Resumo por Setor</h3>
+        <section id="setores" aria-labelledby="setores-heading" class="mt-8" data-aos="fade-right" data-aos-duration="700">
+          <h3 id="setores-heading" class="text-xl text-gold-400 font-bold mb-3">Resumo por Setor</h3>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <!-- Legalização -->
-            <div class="p-4 bg-white rounded-lg border">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="ui-card p-4 rounded-card">
               <div class="flex justify-between items-start">
                 <div>
-                  <div class="font-bold">Legalização</div>
-                  <div class="text-sm text-gray-500 mt-1">Processos e rotinas de legalização implementados. Monitoramento contínuo e indicadores para compliance.</div>
+                  <div class="font-bold text-white">Legalização</div>
+                  <div class="text-sm text-muted mt-1">Processos e rotinas implementados. Monitoramento contínuo e indicadores para compliance.</div>
                 </div>
                 <div class="text-right">
-                  <div class="font-bold">100%</div>
-                  <div class="text-sm text-gray-400">Concluído</div>
+                  <div class="font-bold text-white">100%</div>
+                  <div class="text-sm text-muted">Concluído</div>
                 </div>
               </div>
             </div>
 
-            <!-- Contabilidade -->
-            <div class="p-4 bg-white rounded-lg border">
+            <div class="ui-card p-4 rounded-card">
               <div class="flex justify-between items-start">
                 <div>
-                  <div class="font-bold">Contabilidade</div>
-                  <div class="text-sm text-gray-500 mt-1">Fluxo contábil atualizado, dashboards com KPIs e redução de retrabalho.</div>
+                  <div class="font-bold text-white">Contabilidade</div>
+                  <div class="text-sm text-muted mt-1">Fluxo contábil atualizado, dashboards com KPIs e redução de retrabalho.</div>
                 </div>
                 <div class="text-right">
-                  <div class="font-bold">100%</div>
-                  <div class="text-sm text-gray-400">Concluído</div>
+                  <div class="font-bold text-white">100%</div>
+                  <div class="text-sm text-muted">Concluído</div>
                 </div>
               </div>
             </div>
 
-            <!-- RH Quark -->
-            <div class="p-4 bg-white rounded-lg border">
+            <div class="ui-card p-4 rounded-card">
               <div class="flex justify-between items-start">
                 <div>
-                  <div class="font-bold">RH — Quark</div>
-                  <div class="text-sm text-gray-500 mt-1">Sistema RH em fase inicial: padronização de campos, importação e validações de duplicidade em andamento.</div>
+                  <div class="font-bold text-white">RH — Quark</div>
+                  <div class="text-sm text-muted mt-1">Sistema em fase inicial: padronização, importação e validações de duplicidade em andamento.</div>
                 </div>
                 <div class="text-right">
-                  <div class="font-bold">30%</div>
-                  <div class="text-sm text-gray-400">Em progresso</div>
+                  <div class="font-bold text-white">30%</div>
+                  <div class="text-sm text-muted">Em progresso</div>
                 </div>
               </div>
             </div>
 
-            <!-- DigiSac -->
-            <div class="p-4 bg-white rounded-lg border">
+            <div class="ui-card p-4 rounded-card">
               <div class="flex justify-between items-start">
                 <div>
-                  <div class="font-bold">DigiSac</div>
-                  <div class="text-sm text-gray-500 mt-1">Robô de triagem e automação de atendimento estabilizados. Baixa reclamação dos clientes — processo de descontinuação iniciado para migração ao Tareffa Comunicação.</div>
+                  <div class="font-bold text-white">DigiSac</div>
+                  <div class="text-sm text-muted mt-1">Robô de triagem estabilizado. Migração para o Tareffa Comunicação em andamento.</div>
                 </div>
                 <div class="text-right">
-                  <div class="font-bold">100%</div>
-                  <div class="text-sm text-gray-400">Concluído / Em descontinuação</div>
+                  <div class="font-bold text-white">100%</div>
+                  <div class="text-sm text-muted">Descontinuando</div>
                 </div>
               </div>
             </div>
-
-            <!-- Agendamento -->
-            <div class="p-4 bg-white rounded-lg border">
+            
+            <div class="ui-card p-4 rounded-card md:col-span-2">
               <div class="flex justify-between items-start">
                 <div>
-                  <div class="font-bold">Sistema de Agendamento</div>
-                  <div class="text-sm text-gray-500 mt-1">Desenvolvido para eliminar conflitos, com autenticação JWT, filtros avançados e exportações — implantação total no escritório.</div>
+                  <div class="font-bold text-white">Vector / PDV</div>
+                  <div class="text-sm text-muted mt-1">Plano de marketing ativo, expansão digital e desenvolvimento do PDV. Você está atuando como Product Owner do PDV em parceria com Fabricio e Sirlovani; suporte pontual ao Henrique.</div>
                 </div>
                 <div class="text-right">
-                  <div class="font-bold">95%</div>
-                  <div class="text-sm text-gray-400">Em uso</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Telefonia IP -->
-            <div class="p-4 bg-white rounded-lg border">
-              <div class="flex justify-between items-start">
-                <div>
-                  <div class="font-bold">Telefonia IP</div>
-                  <div class="text-sm text-gray-500 mt-1">Introdução com treinamentos iniciais; integração a melhorar e monitorar taxas de atendimento.</div>
-                </div>
-                <div class="text-right">
-                  <div class="font-bold">50%</div>
-                  <div class="text-sm text-gray-400">Em andamento</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Vector / PDV -->
-            <div class="p-4 bg-white rounded-lg border md:col-span-2">
-              <div class="flex justify-between items-start">
-                <div>
-                  <div class="font-bold">Vector / PDV</div>
-                  <div class="text-sm text-gray-500 mt-1">Plano de marketing ativo, expansão digital e desenvolvimento do PDV. Você está atuando como Product Owner do PDV em parceria com Fabricio e Sirlovani; suporte pontual ao Henrique.</div>
-                </div>
-                <div class="text-right">
-                  <div class="font-bold">85%</div>
-                  <div class="text-sm text-gray-400">Em execução</div>
+                  <div class="font-bold text-white">85%</div>
+                  <div class="text-sm text-muted">Em execução</div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Team (names only) -->
-        <section id="team" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 style="color:var(--gold-700);font-weight:700;margin-bottom:8px;">Equipe & Responsabilidades</h3>
-          <div class="flex flex-wrap gap-3">
-            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Nicolas — Product Owner / Coordenação e suporte</div>
-            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Fabricio — Front-end / Integrações PDV</div>
-            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Sirlovani — Back-end / Banco de dados</div>
-            <div class="px-4 py-2 bg-white rounded-lg border text-sm">Henrique — Atendimento e validação em campo</div>
-          </div>
+        <section id="team" aria-labelledby="team-heading" class="mt-8" data-aos="fade-up" data-aos-duration="700">
+          <h3 id="team-heading" class="text-xl text-gold-400 font-bold mb-3">Equipe & Responsabilidades</h3>
+          <ul class="flex flex-wrap gap-3">
+            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Nicolas — Product Owner / Coordenação</li>
+            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Fabricio — Front-end / Integrações PDV</li>
+            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Sirlovani — Back-end / Banco de dados</li>
+            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Henrique — Atendimento e validação</li>
+          </ul>
         </section>
 
-        <!-- Observations / Next steps -->
-        <section class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h4 style="font-weight:700;">Observações & Próximos passos</h4>
-          <ul style="color:#334155; margin-left:16px; margin-top:8px; line-height:1.6;">
+        <section id="next-steps" aria-labelledby="next-steps-heading" class="mt-8" data-aos="fade-up" data-aos-duration="700">
+          <h4 id="next-steps-heading" class="font-bold text-lg text-white">Observações & Próximos passos</h4>
+          <ul class="list-disc list-inside text-gray-300 space-y-1 mt-3" style="line-height: 1.6;">
             <li>Planejar e executar migração final do DigiSac para o Tareffa Comunicação até Q1 2026.</li>
             <li>Concluir importação do RH Quark com validações e deduplicação de registros.</li>
             <li>Finalizar features do PDV, realizar testes com clientes piloto e organizar rollout controlado.</li>
@@ -384,112 +351,137 @@
           </ul>
         </section>
 
-        <footer style="margin-top:18px; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#64748b;">
+        <footer class="mt-12 pt-6 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center text-sm text-muted gap-2">
           <div>HDL Contabilidade — Relatório Interno</div>
-          <div>Assinado: <strong>Nicolas Gonçalves</strong> — Emitido em <span id="emitDateFooter"></span></div>
+          <div>Assinado: <strong class="text-gray-100">Nicolas Gonçalves</strong> — Emitido em <span id="emitDateFooter" class="text-gray-100"></span></div>
         </footer>
       </article>
     </main>
   </div>
 
-  <!-- Initialize icons & AOS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
   <script>
-    lucide.createIcons();
-    AOS.init({ once:true, duration:700 });
-    const dateStr = (new Date()).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
-    document.getElementById('emitDateTop').innerText = dateStr;
-    document.getElementById('emitDateFooter').innerText = dateStr;
+    function setupAccessibility() {
+      lucide.createIcons();
+      document.querySelectorAll('svg.lucide').forEach(icon => {
+        icon.setAttribute('aria-hidden', 'true');
+      });
+    }
+
+    function initializeApp() {
+      AOS.init({ once: true, duration: 700 });
+      setupAccessibility();
+
+      const dateStr = (new Date()).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+      document.getElementById('emitDateTop').innerText = dateStr;
+      document.getElementById('emitDateFooter').innerText = dateStr;
+    }
+
+    initializeApp();
   </script>
 
-  <!-- ApexCharts: Mixed, Donut, Radar, Bar -->
   <script>
+    // Tema escuro padrão para todos os gráficos
+    const chartTheme = {
+      theme: {
+        mode: 'dark',
+        palette: 'palette1' // Usa a paleta de cores padrão do ApexCharts
+      }
+    };
+    
     // Mixed chart (bar + line)
     const mixedOptions = {
-      chart: { type: 'line', height: 260, toolbar: { show:false }, animations: { enabled:true, easing: 'easeout', speed: 700 }},
+      chart: { type: 'line', height: 260, toolbar: { show:false }, animations: { enabled:true, easing: 'easeout', speed: 700 }, background: 'transparent' },
+      ...chartTheme,
       series: [
-        { name: 'Progresso (%)', type: 'column', data: [40,55,60,65,70,90] }, // merged from original and updated
+        { name: 'Progresso (%)', type: 'column', data: [40,55,60,65,70,90] },
         { name: 'Satisfação (índice)', type: 'line', data: [60,70,75,80,85,85] }
       ],
-      stroke: { width: [0,3] },
+      stroke: { width: [0,3], curve: 'smooth' },
       plotOptions: { bar: { columnWidth: '48%', borderRadius: 6 }},
-      colors: ['#facc15','#0f172a'],
+      colors: ['#facc15','#ffffff'],
       xaxis: { categories: ['Mai','Jun','Jul','Ago','Set','Out'] },
       yaxis: [{ title: { text: 'Progresso (%)' }, min:0, max:100 }, { opposite: true, min:0, max:100, title: { text: 'Satisfação' }}],
       legend: { horizontalAlign:'left' },
-      tooltip: { shared:true, intersect:false }
+      tooltip: { shared:true, intersect:false, theme: 'dark' }
     };
     new ApexCharts(document.querySelector("#chartMixed"), mixedOptions).render();
 
     // Donut / distribution
     const donutOptions = {
-      chart: { type: 'donut', height: 260 },
+      chart: { type: 'donut', height: 260, background: 'transparent' },
+      ...chartTheme,
       series: [100,100,30,95,85],
       labels: ['Legalização','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'],
       colors: ['#f59e0b','#facc15','#60a5fa','#34d399','#f97316'],
       legend: { position:'bottom' },
-      tooltip: { y: { formatter: val => val + '%' } }
+      tooltip: { y: { formatter: val => val + '%' }, theme: 'dark' }
     };
     new ApexCharts(document.querySelector("#chartDonut"), donutOptions).render();
 
     // Radar
     const radarOptions = {
-      chart: { type: 'radar', height: 260 },
+      chart: { type: 'radar', height: 260, toolbar: { show: false }, background: 'transparent' },
+      ...chartTheme,
       series: [{ name: 'Indicadores', data: [85,75,70,25,80] }],
       labels: ['Adoção','Automação','Readiness','Risco','Suporte'],
       colors: ['#ef4444'],
-      yaxis: { min:0, max:100 }
+      yaxis: { min:0, max:100, labels: { formatter: (val) => val + '%' } },
+      tooltip: { theme: 'dark' },
+      markers: { size: 4 }
     };
     new ApexCharts(document.querySelector("#chartRadar"), radarOptions).render();
 
-    // Horizontal Bar (for printed summary)
+    // Horizontal Bar
     const barOptions = {
-      chart: { type: 'bar', height: 260 },
+      chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent' },
+      ...chartTheme,
       series: [{ name: 'Progresso', data: [100,100,30,95,85] }],
       colors: ['#facc15'],
-      plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 6 }},
-      xaxis: { categories: ['Legalização','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'], max:100 },
-      tooltip: { y: { formatter: val => val + '%' } }
+      plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 6, dataLabels: { position: 'top' } }},
+      dataLabels: { enabled: true, offsetX: 40, style: { colors: ['#fff'] }, formatter: (val) => val + '%' },
+      xaxis: { categories: ['Legalização','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'], max:100, labels: { show: false } },
+      tooltip: { theme: 'dark' }
     };
     new ApexCharts(document.querySelector("#chartBar"), barOptions).render();
   </script>
 
-  <!-- PDF Export logic (preserve styling, use clone) -->
   <script>
     function exportReportToPDF(triggerBtn) {
-      const element = document.getElementById('report');
-      // clone and prepare
+      // MELHORIA: O ID do elemento a ser exportado foi corrigido.
+      const element = document.getElementById('report-content');
       const clone = element.cloneNode(true);
-      clone.style.boxShadow = 'none';
-      clone.style.margin = '0';
-      clone.style.width = '210mm'; // A4 width
-      clone.style.minHeight = '297mm';
-      // remove AOS attributes to prevent weird inline styles
-      clone.querySelectorAll('[data-aos]').forEach(n => n.removeAttribute('data-aos'));
 
-      // Ensure charts are visible in clone: re-render charts into clone by serializing canvas images
-      // Convert each ApexCharts container to image in clone (approximation): use existing chart SVGs if present.
-      // For reliability, we let html2canvas capture current DOM with scale 2.
-
-      // append clone hidden
+      // Prepara o clone para renderização (necessário para html2canvas)
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.left = '-9999px';
+      container.style.top = '0';
+      // Definimos uma largura fixa para o PDF, para que o layout não quebre
+      container.style.width = '1200px'; 
       container.appendChild(clone);
       document.body.appendChild(container);
 
       const filename = `Relatorio-HDL-2025_${(new Date()).toISOString().slice(0,10)}.pdf`;
       const opt = {
-        margin:       [10,10,10,10],
+        margin:       [10, 10, 10, 10],
         filename:     filename,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false },
+        // MELHORIA: Aumentar a escala melhora a qualidade do texto
+        html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#0f1724' },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // disable button while generating
-      if (triggerBtn) { triggerBtn.disabled = true; triggerBtn.innerText = 'Gerando PDF...'; }
+      if (triggerBtn) { 
+        triggerBtn.disabled = true; 
+        triggerBtn.innerText = 'Gerando PDF...'; 
+      }
 
-      // Use html2pdf to save
+      // Agora exportamos o *clone* que está no container
       html2pdf().set(opt).from(clone).save()
         .then(() => {
           document.body.removeChild(container);
@@ -500,187 +492,26 @@
           alert('Erro ao gerar PDF. Veja console.');
         })
         .finally(() => {
-          if (triggerBtn) { setTimeout(()=>{ triggerBtn.disabled=false; triggerBtn.innerText='Exportar PDF'; }, 1200); }
+          if (triggerBtn) { 
+            setTimeout(() => { 
+              triggerBtn.disabled = false; 
+              triggerBtn.innerText = 'Exportar PDF'; 
+            }, 1200); 
+          }
         });
     }
 
-    // hook button
     document.getElementById('btnExportApp').addEventListener('click', function(){ exportReportToPDF(this); });
 
-    // keyboard shortcut: Ctrl+E to export
     window.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
         e.preventDefault();
         const btn = document.getElementById('btnExportApp');
-        exportReportToPDF(btn);
+        if (!btn.disabled) {
+          exportReportToPDF(btn);
+        }
       }
     });
   </script>
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html lang="pt-BR" class="dark">
-<head>
-  <meta charset="UTF-8">
-  <title>Relatório de Evolução 2025 – HDL Contabilidade</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body class="bg-[#1a1a1a] text-gray-200 flex h-screen">
-  <!-- Menu Lateral -->
-  <aside class="w-64 bg-[#111] text-gray-200 flex flex-col fixed h-full p-6 shadow-xl">
-    <h1 class="text-2xl font-bold text-yellow-400 mb-8">HDL Contabilidade</h1>
-    <nav class="space-y-4">
-      <a href="#resumo" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="book-open"></i><span>Resumo</span></a>
-      <a href="#tareffa" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="check-circle"></i><span>Tareffa</span></a>
-      <a href="#digisac" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="message-circle"></i><span>DigiSac</span></a>
-      <a href="#telefonia" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="phone"></i><span>Telefonia IP</span></a>
-      <a href="#agendamento" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="calendar"></i><span>Agendamento</span></a>
-      <a href="#vector" class="flex items-center space-x-2 hover:text-yellow-400"><i data-lucide="trending-up"></i><span>Vector</span></a>
-    </nav>
-  </aside>
-
-  <!-- Conteúdo Principal -->
-  <main class="ml-64 flex-1 overflow-y-auto">
-    <!-- Header -->
-    <header class="flex justify-between items-center bg-[#222] px-8 py-4 sticky top-0 shadow-md z-10 border-b border-gray-700">
-      <h2 class="text-2xl font-bold">📊 Relatório de Evolução 2025 – HDL Contabilidade</h2>
-      <button onclick="window.print()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg font-semibold shadow">Exportar</button>
-    </header>
-
-    <section class="p-8 space-y-12">
-      <!-- Resumo Geral -->
-      <div id="resumo" class="space-y-6">
-        <h3 class="text-3xl font-bold text-yellow-400 flex items-center"><i data-lucide="book-open" class="mr-2"></i>Resumo Geral</h3>
-        <div class="bg-gradient-to-r from-yellow-500/20 via-gray-800 to-yellow-500/20 p-6 rounded-2xl shadow-lg border border-yellow-500/30">
-          <p class="text-lg leading-relaxed text-gray-100">
-            Durante o ano de 2025, a HDL Contabilidade avançou significativamente em sistemas internos e na modernização dos processos. 
-            Foram configurados setores no Tareffa, automatizado o atendimento no DigiSac, implantada a Telefonia IP e desenvolvido do zero um sistema de agendamento robusto. 
-            Também foi iniciado o plano de marketing do Vector, com foco em expansão digital. 
-            Os resultados já mostram ganhos de eficiência, organização e maior satisfação dos clientes internos e externos.
-          </p>
-        </div>
-      </div>
-
-      <!-- Tareffa -->
-      <div id="tareffa" class="space-y-6">
-        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="check-circle" class="mr-2"></i>Tareffa</h3>
-        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
-          <p class="font-semibold text-gray-100">Resumo: Configuração de setores fiscais, pessoais, financeiros, legalização e contábeis.</p>
-          <p class="text-gray-300 mt-2">Pendências nos regimes tributários e ajustes de processos contábeis, mas já com dashboards ativos para acompanhamento.</p>
-          <div class="mt-4">
-            <div class="w-full bg-gray-700 rounded-full h-3">
-              <div class="bg-yellow-400 h-3 rounded-full" style="width: 70%"></div>
-            </div>
-            <p class="text-sm mt-1">Progresso: 70%</p>
-          </div>
-        </div>
-        <canvas id="chartTareffa" class="w-full h-64"></canvas>
-      </div>
-
-      <!-- DigiSac -->
-      <div id="digisac" class="space-y-6">
-        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="message-circle" class="mr-2"></i>DigiSac</h3>
-        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
-          <p class="font-semibold text-gray-100">Resumo: Automação de atendimento e organização de contatos por tags e setores.</p>
-          <p class="text-gray-300 mt-2">Sistema com robô de triagem inteligente, garantindo agilidade no atendimento e melhor experiência ao cliente.</p>
-          <div class="mt-4">
-            <div class="w-full bg-gray-700 rounded-full h-3">
-              <div class="bg-yellow-400 h-3 rounded-full" style="width: 85%"></div>
-            </div>
-            <p class="text-sm mt-1">Progresso: 85%</p>
-          </div>
-        </div>
-        <canvas id="chartDigiSac" class="w-full h-64"></canvas>
-      </div>
-
-      <!-- Telefonia IP -->
-      <div id="telefonia" class="space-y-6">
-        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="phone" class="mr-2"></i>Telefonia IP</h3>
-        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
-          <p class="font-semibold text-gray-100">Resumo: Introdução da telefonia IP com suporte técnico e treinamento inicial.</p>
-          <p class="text-gray-300 mt-2">Configuração em todos os computadores, melhorias em andamento com integração ao servidor central.</p>
-          <div class="mt-4">
-            <div class="w-full bg-gray-700 rounded-full h-3">
-              <div class="bg-yellow-400 h-3 rounded-full" style="width: 50%"></div>
-            </div>
-            <p class="text-sm mt-1">Progresso: 50%</p>
-          </div>
-        </div>
-        <canvas id="chartTelefonia" class="w-full h-64"></canvas>
-      </div>
-
-      <!-- Sistema de Agendamento -->
-      <div id="agendamento" class="space-y-6">
-        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="calendar" class="mr-2"></i>Sistema de Agendamento</h3>
-        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
-          <p class="font-semibold text-gray-100">Resumo: Sistema desenvolvido para eliminar conflitos e gerar relatórios.</p>
-          <p class="text-gray-300 mt-2">Com interface moderna, autenticação JWT e exportações, trouxe organização e clareza para reuniões.</p>
-          <div class="mt-4">
-            <div class="w-full bg-gray-700 rounded-full h-3">
-              <div class="bg-yellow-400 h-3 rounded-full" style="width: 90%"></div>
-            </div>
-            <p class="text-sm mt-1">Progresso: 90%</p>
-          </div>
-        </div>
-        <canvas id="chartAgendamento" class="w-full h-64"></canvas>
-      </div>
-
-      <!-- Vector -->
-      <div id="vector" class="space-y-6">
-        <h3 class="text-2xl font-bold text-yellow-400 flex items-center"><i data-lucide="trending-up" class="mr-2"></i>Vector</h3>
-        <div class="bg-[#2a2a2a] p-6 rounded-2xl shadow-lg hover:shadow-yellow-500/20 transition">
-          <p class="font-semibold text-gray-100">Resumo: Plano de marketing em construção com foco em redes sociais e novos nichos.</p>
-          <p class="text-gray-300 mt-2">Voltado ao setor de ferro-velho e crescimento digital, ainda em fase inicial de desenvolvimento.</p>
-          <div class="mt-4">
-            <div class="w-full bg-gray-700 rounded-full h-3">
-              <div class="bg-yellow-400 h-3 rounded-full" style="width: 40%"></div>
-            </div>
-            <p class="text-sm mt-1">Progresso: 40%</p>
-          </div>
-        </div>
-        <canvas id="chartVector" class="w-full h-64"></canvas>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    lucide.createIcons();
-
-    // Função para inicializar gráficos
-    function initChart(id, label, data, color) {
-      new Chart(document.getElementById(id), {
-        type: 'line',
-        data: {
-          labels: ["Mai", "Jun", "Jul", "Ago", "Set", "Out"],
-          datasets: [{
-            label: label,
-            data: data,
-            borderColor: color,
-            backgroundColor: color + "33",
-            tension: 0.4,
-            fill: true
-          }]
-        },
-        options: { 
-          responsive: true, 
-          plugins: { legend: { labels: { color: "#fff" }}}, 
-          scales: { 
-            x: { ticks: { color: "#aaa"} }, 
-            y: { ticks: { color: "#aaa"}} 
-          }
-        }
-      });
-    }
-
-    initChart("chartTareffa", "Tareffa", [40, 55, 60, 65, 70, 70], "#facc15");
-    initChart("chartDigiSac", "DigiSac", [60, 70, 75, 80, 85, 85], "#facc15");
-    initChart("chartTelefonia", "Telefonia", [20, 30, 40, 45, 50, 50], "#facc15");
-    initChart("chartAgendamento", "Agendamento", [60, 70, 80, 85, 90, 90], "#facc15");
-    initChart("chartVector", "Vector", [10, 15, 20, 25, 40, 40], "#facc15");
-  </script>
-</body>
-</html>
->>>>>>> 0ae1598759c82e34caa7c805fb50f07348266e61
