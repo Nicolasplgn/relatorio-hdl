@@ -190,8 +190,9 @@
 
           <div class="ui-card p-4 rounded-card">
             <div class="text-sm text-muted">DigiSac (descontinuação)</div>
-            <div class="text-2xl font-bold mt-2 text-white">100%</div>
-            <div class="text-sm text-muted mt-1">Tags de grupos e robôs de automação — máxima extração realizada</div>
+<div class="text-2xl font-bold mt-2 text-white">70%</div>
+<div class="text-sm text-muted mt-1">Dashboards e fluxos — ajustes e melhorias em andamento</div>
+
           </div>
         </section>
 
@@ -460,7 +461,7 @@
     const donutOptions = {
       chart: { type: 'donut', height: 260, background: 'transparent' },
       ...chartTheme,
-      series: [85,100,30,95,85],
+      series: [85,70,30,95,85],
       labels: ['Tareffa','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'],
       colors: ['#f59e0b','#facc15','#60a5fa','#34d399','#f97316'],
       legend: { position:'bottom' },
@@ -485,7 +486,7 @@
     const barOptions = {
       chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent' },
       ...chartTheme,
-      series: [{ name: 'Progresso', data: [85,100,30,95,85] }],
+series: [{ name: 'Progresso', data: [85,70,30,95,85] }],
       colors: ['#facc15'],
       plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 6, dataLabels: { position: 'top' } }},
       dataLabels: { enabled: true, offsetX: 40, style: { colors: ['#fff'] }, formatter: (val) => val + '%' },
