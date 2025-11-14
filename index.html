@@ -111,7 +111,6 @@
         <a href="#digisac" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="smartphone"></i> DigiSac</a>
         <a href="#telefonia" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="phone"></i> Telefonia IP</a>
         <a href="#vector" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="trending-up"></i> Vector / PDV</a>
-        <a href="#team" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="users"></i> Equipe</a>
       </nav>
 
       <button id="btnExportApp" class="w-full mt-6 px-4 py-2 bg-gold-500 hover:bg-gold-700 text-black rounded-md font-semibold shadow transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-bg-dark">Exportar PDF</button>
@@ -142,57 +141,46 @@
           <div class="text-xs text-muted">Relatório técnico — Dark Mode</div>
         </div>
 
-        <!-- RESUMO GERAL - mesclado com o PDF -->
+        <!-- RESUMO GERAL -->
         <section id="resumo" aria-labelledby="resumo-heading" data-aos="fade-right" data-aos-duration="700">
           <h2 id="resumo-heading" class="text-xl font-bold text-gold-400 mb-3">Resumo Geral</h2>
           <div class="space-y-3 text-gray-300" style="line-height: 1.6;">
             <p>
-              Em 2025 a HDL avançou em modernização interna e automações críticas. Os principais focos foram:
-              implantação e configuração do <strong>Tareffa</strong> (setores e processos), desenvolvimento do
-              <strong>sistema de agendamento</strong>, estabilização e descontinuação ordenada do <strong>DigiSac</strong>,
-              implementação inicial da <strong>Telefonia IP</strong> e início do plano de desenvolvimento para o <strong>Vector (PDV)</strong>.
+              Em 2025, a HDL consolidou a modernização de seus processos com avanços significativos no <strong>Tareffa</strong>, que agora suporta operações-chave nos setores Financeiro e Legalização. O projeto do <strong>PDV (Vector)</strong> atingiu um marco importante, com a aplicação em produção e disponível publicamente, enquanto o <strong>sistema de Agendamento</strong> e a <strong>Telefonia IP</strong> se mantêm como ferramentas estáveis e implementadas.
             </p>
-
             <p>
-              O documento integra aqui a visão executiva já presente no HTML com os detalhes técnicos do projeto:
-              arquitetura do sistema de agendamento (Node.js + Express + SQLite), autenticação JWT, estrutura de permissões,
-              e melhorias operacionais aplicadas ao DigiSac e à Telefonia IP.
+              Um ponto de atenção é a integração com o <strong>Tareffa Comunicação</strong>, que foi paralisada devido a limitações técnicas, fazendo com que o <strong>DigiSac</strong> continue sendo a ferramenta principal para atendimento, com foco na otimização do uso de tags. A estratégia agora é aguardar as atualizações do fornecedor do Tareffa antes de retomar a migração.
             </p>
-
             <p>
-              Observação importante sobre o <strong>Tareffa</strong>: embora a configuração de setores (Fiscal, Pessoal, Financeiro,
-              Legalização e Contábil) esteja avançada, ainda restam entregas operacionais — migração final dos chamados para o
-              módulo <strong>Tareffa Comunicação</strong>, tratativas de parcelamento na Legalização, procedimentos para empresas
-              sem movimento e treinamentos formais com a equipe de Contabilidade sobre o uso correto dos processos.
+              As pendências atuais concentram-se na adoção e no refinamento de processos dentro do Tareffa, como o treinamento da equipe de Contabilidade, a criação de um novo processo para o setor Fiscal e a revisão dos serviços do Departamento Pessoal, demonstrando que o foco mudou da implementação técnica para a gestão da mudança e otimização operacional.
             </p>
           </div>
         </section>
 
-        <!-- KPIs -->
+        <!-- KPIs - ATUALIZADOS -->
         <section id="kpis" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8" data-aos="fade-up" data-aos-duration="700">
           <div class="ui-card p-4 rounded-card">
-            <div class="text-sm text-muted">Tareffa (configuração e rollout)</div>
-            <div class="text-2xl font-bold mt-2 text-white">85%</div>
-            <div class="text-sm text-muted mt-1">Configuração de setores e processos — pendências operacionais</div>
+            <div class="text-sm text-muted">Tareffa (processos e adoção)</div>
+            <div class="text-2xl font-bold mt-2 text-white">90%</div>
+            <div class="text-sm text-muted mt-1">Processos implementados, com pendências de adoção e refinamento.</div>
           </div>
 
           <div class="ui-card p-4 rounded-card">
-            <div class="text-sm text-muted">Contabilidade</div>
-            <div class="text-2xl font-bold mt-2 text-white">70%</div>
-            <div class="text-sm text-muted mt-1">Dashboards e fluxos / Realizar treinamentos </div>
+            <div class="text-sm text-muted">HDL (Adoção Geral)</div>
+            <div class="text-2xl font-bold mt-2 text-white">80%</div>
+            <div class="text-sm text-muted mt-1">Análise de dados e maturidade dos processos.</div>
           </div>
 
           <div class="ui-card p-4 rounded-card">
             <div class="text-sm text-muted">RH (Quark)</div>
             <div class="text-2xl font-bold mt-2 text-white">30%</div>
-            <div class="text-sm text-muted mt-1">Importação de dados</div>
+            <div class="text-sm text-muted mt-1">Aguardando modelos de documentos e rubricas financeiras.</div>
           </div>
 
           <div class="ui-card p-4 rounded-card">
-            <div class="text-sm text-muted">DigiSac (descontinuação)</div>
-<div class="text-2xl font-bold mt-2 text-white">70%</div>
-<div class="text-sm text-muted mt-1">Dashboards e fluxos — ajustes e melhorias em andamento</div>
-
+            <div class="text-sm text-muted">Vector / PDV (Produção)</div>
+            <div class="text-2xl font-bold mt-2 text-white">95%</div>
+            <div class="text-sm text-muted mt-1">Sistema no ar e funcional. Melhorias contínuas em andamento.</div>
           </div>
         </section>
 
@@ -208,7 +196,7 @@
 
           <div class="ui-card text-white p-4 rounded-card">
             <div class="flex items-center justify-between mb-3">
-              <div><strong class="text-lg">Distribuição por Setor</strong><div class="text-sm text-muted">Progresso atual (%)</div></div>
+              <div><strong class="text-lg">Distribuição por Projeto</strong><div class="text-sm text-muted">Progresso atual (%)</div></div>
               <div class="text-xs text-muted">Snapshot</div>
             </div>
             <div id="chartDonut" class="chart-area"></div>
@@ -221,11 +209,11 @@
             <div class="flex justify-between">
               <div>
                 <div class="font-bold text-white">Telefonia IP</div>
-                <div class="text-sm text-muted mt-1">Introdução com suporte e treinamento. Integração em andamento.</div>
+                <div class="text-sm text-muted mt-1">Infraestrutura estável e em uso contínuo pela equipe.</div>
               </div>
               <div class="text-right">
                 <div class="font-bold text-white">100%</div>
-                <div class="text-sm text-muted">Configuração</div>
+                <div class="text-sm text-muted">Configurado</div>
               </div>
             </div>
           </div>
@@ -234,7 +222,7 @@
             <div class="flex justify-between">
               <div>
                 <div class="font-bold text-white">Agendamento</div>
-                <div class="text-sm text-muted mt-1">Sistema com filtros, validação de conflitos e UX atualizados. Uso por todo o escritório.</div>
+                <div class="text-sm text-muted mt-1">Sistema validado e utilizado por todo o escritório.</div>
               </div>
               <div class="text-right">
                 <div class="font-bold text-white">95%</div>
@@ -246,12 +234,12 @@
           <div class="ui-card p-4 rounded-card">
             <div class="flex justify-between">
               <div>
-                <div class="font-bold text-white">Vector / PDV</div>
-                <div class="text-sm text-muted mt-1">PDV em desenvolvimento (atuação como P.O).</div>
+                <div class="font-bold text-white">Comunicação Tareffa</div>
+                <div class="text-sm text-muted mt-1">Integração paralisada aguardando melhorias do fornecedor.</div>
               </div>
               <div class="text-right">
-                <div class="font-bold text-white">85%</div>
-                <div class="text-sm text-muted">Em execução</div>
+                <div class="font-bold text-white">Pausado</div>
+                <div class="text-sm text-muted">Status</div>
               </div>
             </div>
           </div>
@@ -269,31 +257,24 @@
 
           <div class="ui-card text-white p-4 rounded-card">
             <div class="flex items-center justify-between mb-3">
-              <div><strong class="text-lg">Progresso por Setor</strong><div class="text-sm text-muted">Status de implementação (%)</div></div>
+              <div><strong class="text-lg">Progresso por Projeto</strong><div class="text-sm text-muted">Status de implementação (%)</div></div>
               <div class="text-xs text-muted">Para impressão</div>
             </div>
             <div id="chartBar" class="chart-area"></div>
           </div>
         </section>
 
-        <!-- DETALHES POR SISTEMA: TAREFFA, AGENDAMENTO, DIGISAC, TELEFONIA, VECTOR -->
+        <!-- DETALHES POR SISTEMA -->
         <section id="tareffa" aria-labelledby="tareffa-heading" class="mt-8" data-aos="fade-right" data-aos-duration="700">
-          <h3 id="tareffa-heading" class="text-xl text-gold-400 font-bold mb-3">Tareffa — Configuração e Próximas Entregas</h3>
+          <h3 id="tareffa-heading" class="text-xl text-gold-400 font-bold mb-3">Tareffa — Status por Setor e Próximas Entregas</h3>
 
           <div class="ui-card p-4 rounded-card">
-            <div class="text-gray-300" style="line-height:1.6">
-              <p><strong>Resumo:</strong> O Tareffa foi configurado com os departamentos principais (Fiscal, Pessoal, Financeiro, Legalização e Contábil). Dashboards e rotinas básicas foram criadas, permitindo visibilidade dos serviços por departamento.</p>
-
-              <p><strong>Pendências e tratativas:</strong></p>
-              <ul class="list-disc list-inside text-gray-300">
-                <li>Migração final dos chamados do DigiSac para o <strong>Tareffa Comunicação</strong> — em planejamento e testes (não considerado concluído).</li>
-                <li>Tratativas de parcelamento no módulo de Legalização — negociar regras e modelos de parcelamento para automação.</li>
-                <li>Implementar corretamente o serviço de solicitação para empresas sem movimento (processos e integrações).</li>
-                <li>Treinamento com a equipe de Contabilidade para uso consistente dos processos configurados (padronização de procedimentos).</li>
-                <li>Revisão de regimes tributários e ajustes finos nas configurações de cada cliente/empresa dentro do sistema.</li>
-              </ul>
-
-              <p>Por estas razões, o progresso consolidado do Tareffa é representado como <strong>85%</strong>, refletindo entregas técnicas avançadas mas com atividades operacionais pendentes.</p>
+            <div class="text-gray-300 space-y-3" style="line-height:1.6">
+              <div><strong>Financeiro:</strong> Processo implementado e estável. O serviço de automação de boletos de honorários contábeis está funcionando corretamente, representando um ganho de eficiência.</div>
+              <div><strong>Legalização:</strong> O processo foi implementado com sucesso. A equipe está se adaptando bem e já utiliza as novas funcionalidades, incluindo os serviços de parcelamento via pasta ZIP, o que melhorou a organização.</div>
+              <div><strong>Contabilidade:</strong> O processo está criado, mas a adoção está baixa. A equipe não está movimentando o Kanban como esperado. É necessário realizar um novo treinamento para reforçar a importância e o método de uso.</div>
+              <div><strong>Fiscal:</strong> Há uma necessidade identificada de criar um processo específico para o setor. Uma reunião com Joice e Emerson será agendada para definir os requisitos e desenhar o fluxo de trabalho.</div>
+              <div><strong>Departamento Pessoal (DP):</strong> O processo base está criado, mas é preciso revisar as características e particularidades dos serviços para garantir que atendam plenamente às necessidades do departamento.</div>
             </div>
           </div>
         </section>
@@ -310,90 +291,65 @@
                 <li><strong>Backend:</strong> Node.js + Express, banco SQLite (persistência local), autenticação JWT, criptografia com bcrypt.</li>
                 <li><strong>Frontend:</strong> HTML/CSS/JS (puro) com FullCalendar para visualização, Axios para chamadas AJAX e exportação de relatórios.</li>
                 <li><strong>Permissões:</strong> Usuários fixos (admin e departamentos). Admin vê/edita tudo; departamentos veem apenas suas reuniões com possibilidade de convidar outros departamentos.</li>
-                <li><strong>Lógica de conflitos:</strong> Middleware de validação que impede sobreposição de horários e valida campos obrigatórios.</li>
-                <li><strong>Relatórios:</strong> Filtros por período, sala, exportação CSV/HTML e histórico completo.</li>
-                <li><strong>Status das reuniões:</strong> Pendente / Em andamento / Concluída / Cancelada — atualizações automáticas baseadas em data/hora.</li>
               </ul>
 
-              <p><strong>Resultados:</strong> Redução significativa de conflitos, interface intuitiva e relatórios precisos. O sistema está implementado em ~95% — ajustes menores e polimento UX/relatórios ainda previstos.</p>
+              <p><strong>Resultados:</strong> Redução significativa de conflitos, interface intuitiva e relatórios precisos. O sistema está implementado e é considerado estável.</p>
             </div>
           </div>
         </section>
 
         <section id="digisac" aria-labelledby="digisac-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="digisac-heading" class="text-xl text-gold-400 font-bold mb-3">DigiSac — Automação e Descontinuação</h3>
+          <h3 id="digisac-heading" class="text-xl text-gold-400 font-bold mb-3">DigiSac — Manutenção e Estratégia Atual</h3>
 
           <div class="ui-card p-4 rounded-card">
             <div class="text-gray-300" style="line-height:1.6">
-              <p>O DigiSac foi otimizado com:</p>
-              <ul class="list-disc list-inside text-gray-300">
-                <li>Padronização e agrupamento de contatos via <strong>tags</strong>.</li>
-                <li>Roteamento e triagem via <strong>robôs de automação</strong>, reduzindo necessidade de intervenção manual.</li>
-                <li>Separação por conexões/setores, agilizando o atendimento.</li>
-              </ul>
-
-              <p>Como objetivo estratégico, o DigiSac está sendo descontinuado e a maioria das funcionalidades críticos foi migrada ou substituída — por isso aqui consta como <strong>100%</strong> em termos de extração e estabilização das automações que puderam ser aproveitadas.</p>
+              <p>
+                O plano de migração dos chamados do DigiSac para o <strong>Tareffa Comunicação</strong> foi temporariamente paralisado. Após análise, concluiu-se que a integração atual não funcionaria de forma satisfatória para as necessidades da HDL. A mensalidade do módulo foi suspensa e foi demandada uma atualização ao fornecedor.
+              </p>
+              <p>
+                Até que uma solução viável seja apresentada, o <strong>DigiSac continuará sendo a ferramenta oficial de atendimento</strong>. Os setores (Financeiro, Legalização, DP, Fiscal) operam de forma satisfatória na plataforma, sem pendências críticas de chamados. A recomendação é melhorar o uso de <strong>tags</strong> para aprimorar a organização e a extração de métricas de atendimento.
+              </p>
             </div>
           </div>
         </section>
 
         <section id="telefonia" aria-labelledby="telefonia-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="telefonia-heading" class="text-xl text-gold-400 font-bold mb-3">Telefonia IP — Implantação</h3>
+          <h3 id="telefonia-heading" class="text-xl text-gold-400 font-bold mb-3">Telefonia IP — Implantação e Suporte</h3>
 
           <div class="ui-card p-4 rounded-card">
             <div class="text-gray-300" style="line-height:1.6">
-              <p>Telefonia IP introduzida com configuração inicial por Ronaldo (Sanfer). As atividades realizadas incluem instalação de softphones nas estações, testes de headsets e integração básica com o fluxo de atendimento. Ainda em fase de implementação com ajustes finos pendentes no servidor e monitoring.</p>
+              <p>A Telefonia IP foi introduzida e configurada por Ronaldo (Sanfer). As atividades incluíram a instalação de softphones e testes de headsets. O sistema está estável e em uso contínuo, e a <strong>Sanfer é agora a responsável pela manutenção e suporte contínuo</strong> da infraestrutura.</p>
             </div>
           </div>
         </section>
 
         <section id="vector" aria-labelledby="vector-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="vector-heading" class="text-xl text-gold-400 font-bold mb-3">Vector / PDV — Suporte ao sistema & Desenvolvimento</h3>
+          <h3 id="vector-heading" class="text-xl text-gold-400 font-bold mb-3">Vector / PDV — Em Produção e Melhoria Contínua</h3>
 
           <div class="ui-card p-4 rounded-card">
             <div class="text-gray-300" style="line-height:1.6">
-              <p>O PDV está em desenvolvimento com participação como Nicolas (Desenvolvimento), suporte do Fabricio e Sirlovani no front/back e testes com Henrique e Nicolas, estamos na etapa de atualizar as regras tributárias do sistema (Sirlovani), e atualizar os endpoints da api (Fabricio), fazer a parametrização do que precisa ser feito ainda e Nicolas (Eu), implantar isso dentro do codigo do pdv Plano de marketing é algo futuro que sera focado em presença digital, sendo gerido por outra equipe. Está em <strong>85%</strong> — funcionalidades e rollout controlado ainda pendentes.</p>
+              <p>
+                O PDV foi desenvolvido e implantado com sucesso, estando agora acessível publicamente no endereço: <a href="https://pdv.wavegt.com.br/" target="_blank" class="text-gold-400 hover:underline">https://pdv.wavegt.com.br/</a>.
+                O trabalho atual foca na melhoria contínua e na adição de novas funcionalidades para torná-lo mais robusto e funcional.
+              </p>
+              <p>
+                O desenvolvimento continua com foco em atualizações, como o ajuste de regras tributárias e a otimização de endpoints da API. O projeto está <strong>95%</strong> concluído, com o roadmap focado em evoluções e não mais na implementação inicial.
+              </p>
             </div>
           </div>
         </section>
-
-        <!-- CONSIDERAÇÕES DE MANUTENÇÃO -->
-        <section id="maintenance" class="mt-8" data-aos="fade-up" data-aos-duration="700">
-          <h4 class="font-bold text-lg text-white">Considerações de Manutenção & Boas Práticas</h4>
-          <div class="ui-card p-4 rounded-card mt-3">
-            <div class="text-gray-300" style="line-height:1.6">
-              <ul class="list-disc list-inside">
-                <li>Manter documentação atualizada para processos do Tareffa; isso facilita treinamento e transferência de conhecimento.</li>
-                <li>Planejar a migração do DigiSac em fases, garantindo rollback mínimo e integridade dos contatos e históricos.</li>
-                <li>Agendar treinamentos periódicos com a Contabilidade para consolidação do uso de processos no Tareffa.</li>
-                <li>Monitoramento contínuo da Telefonia IP e métricas de atendimento (SLA, tempo médio de atendimento).</li>
-                <li>Revisão de permissões e segurança (tokens JWT com expiração adequada; rotinas de refresh/blacklist se necessário).</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
+        
         <!-- NEXT STEPS -->
         <section id="next-steps" aria-labelledby="next-steps-heading" class="mt-8" data-aos="fade-up" data-aos-duration="700">
           <h4 id="next-steps-heading" class="font-bold text-lg text-white">Observações & Próximos passos</h4>
           <ul class="list-disc list-inside text-gray-300 space-y-1 mt-3" style="line-height: 1.6;">
-            <li>Planejar e executar migração final do DigiSac para o Tareffa Comunicação até Q1 2026 (implantação por etapas).</li>
-            <li>Concluir tratativas de parcelamento na Legalização e definir regras automáticas no Tareffa.</li>
-            <li>Mapear e implantar serviço de solicitação para empresas sem movimento.</li>
-            <li>Realizar treinamentos com a equipe de Contabilidade sobre o uso dos processos configurados (cronograma de sessões).</li>
-            <li>Finalizar features do PDV, realizar testes com clientes piloto e organizar rollout controlado.</li>
-            <li>Aprimorar integrações da Telefonia IP ao servidor central e monitorar KPIs de atendimento.</li>
-          </ul>
-        </section>
-
-        <!-- TEAM -->
-        <section id="team" aria-labelledby="team-heading" class="mt-8" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="team-heading" class="text-xl text-gold-400 font-bold mb-3">Equipe & Responsabilidades</h3>
-          <ul class="flex flex-wrap gap-3">
-            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Nicolas — Analise de dados / Desenvolvimento / HDL-VECTOR </li>
-            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Fabricio — Front-end / Coordenação / Integrações</li>
-            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Sirlovani — Back-end / Banco de dados / Coordenação / Desenvolvimento ERP</li>
-            <li class="ui-card px-4 py-2 rounded-lg text-sm text-gray-200">Henrique — Atendimento e validação</li>
+            <li>Agendar e realizar novo treinamento com a equipe de <strong>Contabilidade</strong> sobre o uso do Kanban no Tareffa.</li>
+            <li>Marcar reunião com Joice e Emerson para definir e criar o processo do setor <strong>Fiscal</strong> no Tareffa.</li>
+            <li>Revisar e ajustar os serviços do <strong>Departamento Pessoal</strong> no Tareffa para alinhamento fino com as operações.</li>
+            <li>Aguardar o posicionamento do fornecedor sobre as melhorias no <strong>Tareffa Comunicação</strong> antes de reavaliar a migração do DigiSac.</li>
+            <li>Configurar as rubricas financeiras e os modelos de documentos no sistema <strong>Quark</strong> assim que forem enviados por Aline (RH).</li>
+            <li>Continuar o ciclo de melhorias no <strong>PDV (Vector)</strong>, focando em usabilidade e novas funcionalidades baseadas no feedback inicial.</li>
+            <li>Otimizar o uso de <strong>tags no DigiSac</strong> para melhorar a categorização e análise dos atendimentos.</li>
           </ul>
         </section>
 
@@ -457,23 +413,23 @@
     };
     new ApexCharts(document.querySelector("#chartMixed"), mixedOptions).render();
 
-    // Donut / distribution
+    // Donut / distribution - ATUALIZADO
     const donutOptions = {
       chart: { type: 'donut', height: 260, background: 'transparent' },
       ...chartTheme,
-      series: [85,70,30,95,85],
-      labels: ['Tareffa','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'],
+      series: [90, 80, 30, 95, 95],
+      labels: ['Tareffa','HDL (Adoção)','RH (Quark)','Agendamento','Vector/PDV'],
       colors: ['#f59e0b','#facc15','#60a5fa','#34d399','#f97316'],
       legend: { position:'bottom' },
       tooltip: { y: { formatter: val => val + '%' }, theme: 'dark' }
     };
     new ApexCharts(document.querySelector("#chartDonut"), donutOptions).render();
 
-    // Radar
+    // Radar - ATUALIZADO
     const radarOptions = {
       chart: { type: 'radar', height: 260, toolbar: { show: false }, background: 'transparent' },
       ...chartTheme,
-      series: [{ name: 'Indicadores', data: [85,75,70,25,80] }],
+      series: [{ name: 'Indicadores', data: [80,75,70,35,80] }], // Adoção, Automação, Readiness, Risco, Suporte
       labels: ['Adoção','Automação','Readiness','Risco','Suporte'],
       colors: ['#ef4444'],
       yaxis: { min:0, max:100, labels: { formatter: (val) => val + '%' } },
@@ -482,15 +438,15 @@
     };
     new ApexCharts(document.querySelector("#chartRadar"), radarOptions).render();
 
-    // Horizontal Bar
+    // Horizontal Bar - ATUALIZADO
     const barOptions = {
       chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent' },
       ...chartTheme,
-series: [{ name: 'Progresso', data: [85,70,30,95,85] }],
+      series: [{ name: 'Progresso', data: [90, 80, 30, 95, 95] }],
       colors: ['#facc15'],
       plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 6, dataLabels: { position: 'top' } }},
       dataLabels: { enabled: true, offsetX: 40, style: { colors: ['#fff'] }, formatter: (val) => val + '%' },
-      xaxis: { categories: ['Tareffa','Contabilidade','RH (Quark)','Agendamento','Vector/PDV'], max:100, labels: { show: false } },
+      xaxis: { categories: ['Tareffa','HDL (Adoção)','RH (Quark)','Agendamento','Vector/PDV'], max:100, labels: { show: false } },
       tooltip: { theme: 'dark' }
     };
     new ApexCharts(document.querySelector("#chartBar"), barOptions).render();
@@ -498,16 +454,13 @@ series: [{ name: 'Progresso', data: [85,70,30,95,85] }],
 
   <script>
     function exportReportToPDF(triggerBtn) {
-      // MELHORIA: O ID do elemento a ser exportado foi corrigido.
       const element = document.getElementById('report-content');
       const clone = element.cloneNode(true);
 
-      // Prepara o clone para renderização (necessário para html2canvas)
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.left = '-9999px';
       container.style.top = '0';
-      // Definimos uma largura fixa para o PDF, para que o layout não quebre
       container.style.width = '1200px'; 
       container.appendChild(clone);
       document.body.appendChild(container);
@@ -517,7 +470,6 @@ series: [{ name: 'Progresso', data: [85,70,30,95,85] }],
         margin:       [10, 10, 10, 10],
         filename:     filename,
         image:        { type: 'jpeg', quality: 0.98 },
-        // MELHORIA: Aumentar a escala melhora a qualidade do texto
         html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#0f1724' },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
@@ -527,7 +479,6 @@ series: [{ name: 'Progresso', data: [85,70,30,95,85] }],
         triggerBtn.innerText = 'Gerando PDF...'; 
       }
 
-      // Agora exportamos o *clone* que está no container
       html2pdf().set(opt).from(clone).save()
         .then(() => {
           document.body.removeChild(container);
