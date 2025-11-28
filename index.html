@@ -1,514 +1,423 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark" style="scroll-behavior: smooth;">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Relatório Técnico HDL — 2025 Completo</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            gold: {
-              400: '#facc15', // Tom mais claro para highlights
-              500: '#f59e0b', // Tom médio/principal
-              700: '#b45309', // Tom escuro
-            },
-            'bg-dark': '#0f1724', // Fundo principal
-            'bg-dark-soft': '#1a2436', // Fundo de cards
-            'muted': '#94a3b8',   // Texto secundário (cinza-azulado)
-          },
-          fontFamily: {
-            'inter': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial'],
-          },
-          spacing: {
-            '3.5': '14px',
-          },
-          borderRadius: {
-            'card': '10px',
-          }
-        }
-      }
-    }
-  </script>
-  
-  <style>
-    /* MELHORIA GERAL:
-      - Removido o estilo .report-sheet (página branca).
-      - O body agora é o fundo principal.
-      - Criado um .ui-card coeso para TODOS os elementos.
-    */
-    html,body { height:100%; }
-    body { 
-      background: linear-gradient(180deg, #060606, #0b1220); 
-      font-family: 'Inter', ui-sans-serif, system-ui; 
-      -webkit-font-smoothing: antialiased; 
-      color: #e6eef8; /* Cor de texto base */
-    }
-
-    /* Card Padrão (Dark Mode) */
-    .ui-card {
-      /* Fundo com gradiente sutil e borda para "glassmorphism" */
-      background: linear-gradient(180deg, rgba(30, 41, 59, 0.4), rgba(30, 41, 59, 0.2));
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(8px);
-      transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s, border-color .28s;
-    }
-    .ui-card:hover { 
-      transform: translateY(-6px) scale(1.005); 
-      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.45); 
-      border-color: rgba(250, 204, 21, 0.2); /* Borda dourada sutil no hover */
-    }
-
-    /* Logo "HDL" */
-    .brand-badge {
-      width: 56px; height: 56px; border-radius: 10px;
-      background: linear-gradient(135deg, #facc15, #f59e0b);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; color: #081017;
-      box-shadow: 0 8px 24px rgba(250, 204, 21, 0.12);
-      flex-shrink: 0;
-    }
-
-    /* Linha de destaque dourada */
-    .accent-line { 
-      height: 4px; width: 72px; border-radius: 8px; 
-      background: linear-gradient(90deg, #facc15, #b45309);
-      box-shadow: 0 6px 18px rgba(250, 204, 21, 0.12); 
-    }
-
-    .chart-area { height: 260px; }
-
-    /* Ajustes de impressão (Mantido para o PDF) */
-    @media print {
-      body { background: #ffffff; color: #000; }
-      .ui-card { background: #f9fafb; border: 1px solid #e5e7eb; box-shadow: none; }
-      /* ... (mais estilos de impressão seriam necessários para um print perfeito) */
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Relatório Técnico HDL — 2025 Completo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+gold: {
+400: '#facc15', // Tom mais claro para highlights
+500: '#f59e0b', // Tom médio/principal
+700: '#b45309', // Tom escuro
+},
+'bg-dark': '#0f1724', // Fundo principal
+'bg-dark-soft': '#1a2436', // Fundo de cards
+'muted': '#94a3b8', // Texto secundário (cinza-azulado)
+},
+fontFamily: {
+'inter': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial'],
+},
+spacing: {
+'3.5': '14px',
+},
+borderRadius: {
+'card': '10px',
+}
+}
+}
+}
+</script>
+<style>
+html,body { height:100%; }
+body {
+background: linear-gradient(180deg, #060606, #0b1220);
+font-family: 'Inter', ui-sans-serif, system-ui;
+-webkit-font-smoothing: antialiased;
+color: #e6eef8; /* Cor de texto base */
+}
+.ui-card {
+background: linear-gradient(180deg, rgba(30, 41, 59, 0.4), rgba(30, 41, 59, 0.2));
+border: 1px solid rgba(255, 255, 255, 0.06);
+backdrop-filter: blur(8px);
+transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s, border-color .28s;
+}
+.ui-card:hover {
+transform: translateY(-6px) scale(1.005);
+box-shadow: 0 12px 30px rgba(2, 6, 23, 0.45);
+border-color: rgba(250, 204, 21, 0.2);
+}
+.brand-badge {
+width: 56px; height: 56px; border-radius: 10px;
+background: linear-gradient(135deg, #facc15, #f59e0b);
+display: flex; align-items: center; justify-content: center;
+font-weight: 800; color: #081017;
+box-shadow: 0 8px 24px rgba(250, 204, 21, 0.12);
+flex-shrink: 0;
+}
+.accent-line {
+height: 4px; width: 72px; border-radius: 8px;
+background: linear-gradient(90deg, #facc15, #b45309);
+box-shadow: 0 6px 18px rgba(250, 204, 21, 0.12);
+}
+.chart-area { height: 260px; }
+@media print {
+body { background: #ffffff; color: #000; }
+.ui-card { background: #f9fafb; border: 1px solid #e5e7eb; box-shadow: none; }
+}
+</style>
 </head>
 <body class="font-inter">
-  
-  <div class="flex min-h-screen">
-    <aside class="w-72 p-6 hidden lg:block flex-shrink-0">
-      <div class="flex items-center gap-3 mb-8">
-        <div class="w-12 h-12 rounded-md bg-gradient-to-br from-gold-400 to-gold-500 flex items-center justify-center text-black font-bold">HDL</div>
+<div class="flex min-h-screen">
+<aside class="w-72 p-6 hidden lg:block flex-shrink-0">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-12 h-12 rounded-md bg-gradient-to-br from-gold-400 to-gold-500 flex items-center justify-center text-black font-bold">HDL</div>
+<div>
+<div class="text-gold-400 font-bold">HDL Contabilidade</div>
+<div class="text-xs text-gray-400">Relatório Técnico 2025 — Completo</div>
+</div>
+</div>
+<nav role="navigation" class="space-y-3 text-gray-300 text-sm mb-6">
+    <a href="#resumo" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="book-open"></i> Resumo</a>
+    <a href="#hdl-gestao" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="layout-dashboard"></i> HDL Gestão</a>
+    <a href="#tareffa" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="server"></i> Tareffa</a>
+    <a href="#vector" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="trending-up"></i> Vector / PDV</a>
+    <a href="#quark" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="clipboard-user"></i> Quark RH</a>
+    <a href="#digisac" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="smartphone"></i> DigiSac</a>
+    <a href="#telefonia" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="phone"></i> Telefonia IP</a>
+  </nav>
+
+  <button id="btnExportApp" class="w-full mt-6 px-4 py-2 bg-gold-500 hover:bg-gold-700 text-black rounded-md font-semibold shadow transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-bg-dark">Exportar PDF</button>
+
+  <p class="mt-4 text-xs text-gray-400">Atalho: <strong>Ctrl/Cmd + E</strong> para exportar.</p>
+</aside>
+
+<main class="flex-1 p-6 lg:p-12">
+  <article role="article" id="report-content" class="max-w-7xl mx-auto" data-aos="fade-up" data-aos-duration="800">
+    
+    <header class="flex flex-col sm:flex-row items-start justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="brand-badge">HDL</div>
         <div>
-          <div class="text-gold-400 font-bold">HDL Contabilidade</div>
-          <div class="text-xs text-gray-400">Relatório Técnico 2025 — Completo</div>
+          <h1 class="text-2xl font-extrabold text-gold-400">Relatório Técnico HDL — 2025 Completo</h1>
+          <p class="text-base text-muted mt-1">Síntese executiva e técnica dos projetos, automações e entregas.</p>
         </div>
       </div>
 
-      <nav role="navigation" class="space-y-3 text-gray-300 text-sm mb-6">
-        <a href="#resumo" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="book-open"></i> Resumo</a>
-        <a href="#tareffa" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="server"></i> Tareffa</a>
-        <a href="#agendamento" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="calendar"></i> Agendamento</a>
-        <a href="#digisac" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="smartphone"></i> DigiSac</a>
-        <a href="#telefonia" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="phone"></i> Telefonia IP</a>
-        <a href="#vector" class="flex items-center gap-3 p-2 rounded-md hover:text-gold-400 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:text-gold-400 transition-all"><i data-lucide="trending-up"></i> Vector / PDV</a>
-      </nav>
+      <div class="text-sm text-muted sm:text-right w-full sm:w-auto flex-shrink-0">
+        <div>Emitido em: <strong id="emitDateTop" class="text-gray-100"></strong></div>
+        <div class="mt-1.5">Responsável: <strong class="text-gray-100">Nicolas</strong></div>
+      </div>
+    </header>
 
-      <button id="btnExportApp" class="w-full mt-6 px-4 py-2 bg-gold-500 hover:bg-gold-700 text-black rounded-md font-semibold shadow transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-bg-dark">Exportar PDF</button>
+    <div class="flex items-center justify-between mt-6 mb-6">
+      <div class="accent-line"></div>
+      <div class="text-xs text-muted">Relatório técnico — Dark Mode</div>
+    </div>
 
-      <p class="mt-4 text-xs text-gray-400">Atalho: <strong>Ctrl/Cmd + E</strong> para exportar.</p>
-    </aside>
+    <!-- RESUMO GERAL - ATUALIZADO -->
+    <section id="resumo" aria-labelledby="resumo-heading" data-aos="fade-right" data-aos-duration="700">
+      <h2 id="resumo-heading" class="text-xl font-bold text-gold-400 mb-3">Resumo Geral</h2>
+      <div class="space-y-3 text-gray-300" style="line-height: 1.6;">
+        <p>
+          Em 2025, a HDL avançou na modernização de seus processos e iniciou o desenvolvimento de um projeto estratégico: o <strong>Sistema HDL Gestão</strong>. A plataforma, atualmente em 35% de desenvolvimento, visa criar um BI financeiro para substituir planilhas manuais e elevar o padrão de apresentação de resultados aos clientes.
+        </p>
+        <p>
+          Em paralelo, o <strong>Vector (PDV)</strong> evoluiu para uma versão mais robusta e empresarial, e o <strong>Tareffa</strong> recebeu novos processos no setor de Legalização. Projetos de infraestrutura como <strong>Agendamento</strong> e <strong>Telefonia IP</strong> permanecem estáveis e em pleno uso.
+        </p>
+        <p>
+          Os desafios atuais se concentram na gestão de dependências externas: aguardamos uma atualização crítica do <strong>Tareffa Comunicação</strong> (prevista para 12/12) para prosseguir com a migração do DigiSac, e a evolução do sistema <strong>Quark (RH)</strong> depende do input de dados pela equipe interna da HDL.
+        </p>
+      </div>
+    </section>
 
-    <main class="flex-1 p-6 lg:p-12">
-      <article role="article" id="report-content" class="max-w-7xl mx-auto" data-aos="fade-up" data-aos-duration="800">
-        
-        <header class="flex flex-col sm:flex-row items-start justify-between gap-4">
-          <div class="flex items-center gap-3.5">
-            <div class="brand-badge">HDL</div>
-            <div>
-              <h1 class="text-2xl font-extrabold text-gold-400">Relatório Técnico HDL — 2025 Completo</h1>
-              <p class="text-base text-muted mt-1">Síntese executiva e técnica dos projetos, automações e entregas.</p>
-            </div>
-          </div>
+    <!-- KPIs - ATUALIZADOS -->
+    <section id="kpis" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-8" data-aos="fade-up" data-aos-duration="700">
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-sm text-muted">Vector / PDV</div>
+        <div class="text-2xl font-bold mt-2 text-white">95%</div>
+        <div class="text-sm text-muted mt-1">Versão empresarial no ar. Melhorias contínuas.</div>
+      </div>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-sm text-muted">Tareffa</div>
+        <div class="text-2xl font-bold mt-2 text-white">90%</div>
+        <div class="text-sm text-muted mt-1">Processos refinados. Pendências de adoção.</div>
+      </div>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-sm text-muted">HDL (Adoção Geral)</div>
+        <div class="text-2xl font-bold mt-2 text-white">80%</div>
+        <div class="text-sm text-muted mt-1">Análise de dados e maturidade dos processos.</div>
+      </div>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-sm text-muted">HDL Gestão (novo)</div>
+        <div class="text-2xl font-bold mt-2 text-white">35%</div>
+        <div class="text-sm text-muted mt-1">Backend e infraestrutura inicial.</div>
+      </div>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-sm text-muted">RH (Quark)</div>
+        <div class="text-2xl font-bold mt-2 text-white">30%</div>
+        <div class="text-sm text-muted mt-1">Aguardando input de dados do RH.</div>
+      </div>
+    </section>
 
-          <div class="text-sm text-muted sm:text-right w-full sm:w-auto flex-shrink-0">
-            <div>Emitido em: <strong id="emitDateTop" class="text-gray-100"></strong></div>
-            <div class="mt-1.5">Responsável: <strong class="text-gray-100">Nicolas</strong></div>
-          </div>
-        </header>
-
-        <div class="flex items-center justify-between mt-6 mb-6">
-          <div class="accent-line"></div>
-          <div class="text-xs text-muted">Relatório técnico — Dark Mode</div>
+    <!-- CHARTS -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" id="charts" data-aos="zoom-in" data-aos-duration="700">
+      <div class="ui-card text-white p-4 rounded-card">
+        <div class="flex items-center justify-between mb-3">
+          <div><strong class="text-lg">Evolução dos Projetos</strong><div class="text-sm text-muted">Progresso (Mai → Out) / Satisfação</div></div>
+          <div class="text-xs text-muted">Últimos 6 meses</div>
         </div>
+        <div id="chartMixed" class="chart-area"></div>
+      </div>
+      <div class="ui-card text-white p-4 rounded-card">
+        <div class="flex items-center justify-between mb-3">
+          <div><strong class="text-lg">Distribuição por Projeto</strong><div class="text-sm text-muted">Progresso atual (%)</div></div>
+          <div class="text-xs text-muted">Snapshot</div>
+        </div>
+        <div id="chartDonut" class="chart-area"></div>
+      </div>
+    </section>
 
-        <!-- RESUMO GERAL -->
-        <section id="resumo" aria-labelledby="resumo-heading" data-aos="fade-right" data-aos-duration="700">
-          <h2 id="resumo-heading" class="text-xl font-bold text-gold-400 mb-3">Resumo Geral</h2>
-          <div class="space-y-3 text-gray-300" style="line-height: 1.6;">
-            <p>
-              Em 2025, a HDL consolidou a modernização de seus processos com avanços significativos no <strong>Tareffa</strong>, que agora suporta operações-chave nos setores Financeiro e Legalização. O projeto do <strong>PDV (Vector)</strong> atingiu um marco importante, com a aplicação em produção e disponível publicamente, enquanto o <strong>sistema de Agendamento</strong> e a <strong>Telefonia IP</strong> se mantêm como ferramentas estáveis e implementadas.
-            </p>
-            <p>
-              Um ponto de atenção é a integração com o <strong>Tareffa Comunicação</strong>, que foi paralisada devido a limitações técnicas, fazendo com que o <strong>DigiSac</strong> continue sendo a ferramenta principal para atendimento, com foco na otimização do uso de tags. A estratégia agora é aguardar as atualizações do fornecedor do Tareffa antes de retomar a migração.
-            </p>
-            <p>
-              As pendências atuais concentram-se na adoção e no refinamento de processos dentro do Tareffa, como o treinamento da equipe de Contabilidade, a criação de um novo processo para o setor Fiscal e a revisão dos serviços do Departamento Pessoal, demonstrando que o foco mudou da implementação técnica para a gestão da mudança e otimização operacional.
-            </p>
-          </div>
-        </section>
-
-        <!-- KPIs - ATUALIZADOS -->
-        <section id="kpis" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8" data-aos="fade-up" data-aos-duration="700">
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-sm text-muted">Tareffa (processos e adoção)</div>
-            <div class="text-2xl font-bold mt-2 text-white">90%</div>
-            <div class="text-sm text-muted mt-1">Processos implementados, com pendências de adoção e refinamento.</div>
+    <!-- PROJETO HDL GESTÃO - ATUALIZADO -->
+    <section id="hdl-gestao" aria-labelledby="hdl-gestao-heading" class="mt-8" data-aos="fade-up" data-aos-duration="700">
+      <h3 id="hdl-gestao-heading" class="text-xl text-gold-400 font-bold mb-3">Novo Projeto em Andamento: Sistema HDL Gestão</h3>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-gray-300 space-y-4" style="line-height:1.6">
+          <div>
+            <h4 class="font-bold text-white">Objetivo do Projeto</h4>
+            <p>Desenvolver uma plataforma web multiempresa para gestão e apresentação de resultados financeiros (Faturamento x Impostos x Lucro), substituindo planilhas por um dashboard automatizado e profissional para reuniões com clientes.</p>
           </div>
 
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-sm text-muted">HDL (Adoção Geral)</div>
-            <div class="text-2xl font-bold mt-2 text-white">80%</div>
-            <div class="text-sm text-muted mt-1">Análise de dados e maturidade dos processos.</div>
+          <div>
+            <h4 class="font-bold text-white">Status Atual das Entregas (35%)</h4>
+            <ul class="list-disc list-inside space-y-2 mt-2">
+              <li><strong>Infraestrutura e Backend (Em Andamento):</strong> A estrutura inicial do banco de dados MySQL (tabelas de Empresas, Usuários) foi definida. A API REST em Node.js foi iniciada, com as rotas de autenticação e segurança básicas já implementadas.</li>
+              <li><strong>Frontend e Interface (Iniciado):</strong> O projeto frontend foi estruturado com React e Tailwind CSS. A prototipação do layout do dashboard, menu e seletor de empresas está em andamento.</li>
+              <li><strong>Funcionalidades de Negócio (Planejado):</strong> As próximas etapas incluem o desenvolvimento das regras de negócio (cálculos de impostos, lucro), a criação dos relatórios analíticos com exportação para PDF e o módulo inteligente de lançamentos.</li>
+            </ul>
           </div>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-sm text-muted">RH (Quark)</div>
-            <div class="text-2xl font-bold mt-2 text-white">30%</div>
-            <div class="text-sm text-muted mt-1">Aguardando modelos de documentos e rubricas financeiras.</div>
+          
+          <div>
+            <h4 class="font-bold text-white">Tecnologias</h4>
+            <p><strong>Stack:</strong> React.js, Vite, Tailwind CSS (Frontend) | Node.js, Express, MySQL (Backend).</p>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-sm text-muted">Vector / PDV (Produção)</div>
-            <div class="text-2xl font-bold mt-2 text-white">95%</div>
-            <div class="text-sm text-muted mt-1">Sistema no ar e funcional. Melhorias contínuas em andamento.</div>
-          </div>
-        </section>
+    <!-- DETALHES POR SISTEMA -->
+    <section id="tareffa" aria-labelledby="tareffa-heading" class="mt-8" data-aos="fade-right" data-aos-duration="700">
+      <h3 id="tareffa-heading" class="text-xl text-gold-400 font-bold mb-3">Tareffa — Status e Próximas Entregas</h3>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-gray-300 space-y-3" style="line-height:1.6">
+          <div><strong>Legalização:</strong> Foram implementados novos processos para otimizar o fluxo de trabalho. Adicionalmente, está em estudo uma nova estrutura de Kanban para melhorar a visualização e gestão das tarefas do departamento.</div>
+          <div><strong>Demais Setores (Financeiro, Contábil, Fiscal, DP):</strong> Mantêm os processos atuais, com foco na consolidação do uso e na identificação de pequenas melhorias. As pendências de adoção na Contabilidade e a criação do processo Fiscal continuam como pontos de atenção.</div>
+        </div>
+      </div>
+    </section>
 
-        <!-- CHARTS -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" id="charts" data-aos="zoom-in" data-aos-duration="700">
-          <div class="ui-card text-white p-4 rounded-card">
-            <div class="flex items-center justify-between mb-3">
-              <div><strong class="text-lg">Evolução dos Projetos</strong><div class="text-sm text-muted">Progresso (Mai → Out) / Satisfação</div></div>
-              <div class="text-xs text-muted">Últimos 6 meses</div>
-            </div>
-            <div id="chartMixed" class="chart-area"></div>
-          </div>
+    <section id="vector" aria-labelledby="vector-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
+      <h3 id="vector-heading" class="text-xl text-gold-400 font-bold mb-3">Vector / PDV — Evolução e Novos Objetivos</h3>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-gray-300" style="line-height:1.6">
+          <p>O PDV foi atualizado para uma versão empresarial, incorporando um conjunto significativo de novas funcionalidades que o tornam mais competitivo e robusto. O sistema continua acessível em <a href="https://pdv.wavegt.com.br/" target="_blank" class="text-gold-400 hover:underline">pdv.wavegt.com.br</a> e está em ciclo de melhoria contínua.</p>
+          <p>Como próximo passo estratégico, está em análise um método para que as vendas registradas no PDV sejam automaticamente lançadas como faturamento direto nos sistemas de gestão, otimizando a conciliação financeira para os clientes.</p>
+        </div>
+      </div>
+    </section>
 
-          <div class="ui-card text-white p-4 rounded-card">
-            <div class="flex items-center justify-between mb-3">
-              <div><strong class="text-lg">Distribuição por Projeto</strong><div class="text-sm text-muted">Progresso atual (%)</div></div>
-              <div class="text-xs text-muted">Snapshot</div>
-            </div>
-            <div id="chartDonut" class="chart-area"></div>
-          </div>
-        </section>
+    <section id="quark" aria-labelledby="quark-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
+      <h3 id="quark-heading" class="text-xl text-gold-400 font-bold mb-3">Quark — Gestão de RH</h3>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-gray-300" style="line-height:1.6">
+          <p>O módulo de Departamento Pessoal foi introduzido no sistema. A próxima fase do projeto, que inclui a configuração de rubricas financeiras e a inserção de modelos de documentos, foi delegada a Aline (RH), que ficou responsável por alimentar o sistema com as informações necessárias para a sua plena operação.</p>
+        </div>
+      </div>
+    </section>
 
-        <!-- OVERVIEW CARDS -->
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6" data-aos="fade-up" data-aos-duration="700">
-          <div class="ui-card p-4 rounded-card">
-            <div class="flex justify-between">
-              <div>
-                <div class="font-bold text-white">Telefonia IP</div>
-                <div class="text-sm text-muted mt-1">Infraestrutura estável e em uso contínuo pela equipe.</div>
-              </div>
-              <div class="text-right">
-                <div class="font-bold text-white">100%</div>
-                <div class="text-sm text-muted">Configurado</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="flex justify-between">
-              <div>
-                <div class="font-bold text-white">Agendamento</div>
-                <div class="text-sm text-muted mt-1">Sistema validado e utilizado por todo o escritório.</div>
-              </div>
-              <div class="text-right">
-                <div class="font-bold text-white">95%</div>
-                <div class="text-sm text-muted">Implementado</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="flex justify-between">
-              <div>
-                <div class="font-bold text-white">Comunicação Tareffa</div>
-                <div class="text-sm text-muted mt-1">Integração paralisada aguardando melhorias do fornecedor.</div>
-              </div>
-              <div class="text-right">
-                <div class="font-bold text-white">Pausado</div>
-                <div class="text-sm text-muted">Status</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Radar & Bar -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6" data-aos="fade-up" data-aos-duration="700">
-          <div class="ui-card text-white p-4 rounded-card">
-            <div class="flex items-center justify-between mb-3">
-              <div><strong class="text-lg">Indicadores Operacionais</strong><div class="text-sm text-muted">Adoção • Automação • Readiness • Risco • Suporte</div></div>
-              <div class="text-xs text-muted">Visão rápida</div>
-            </div>
-            <div id="chartRadar" class="chart-area"></div>
-          </div>
-
-          <div class="ui-card text-white p-4 rounded-card">
-            <div class="flex items-center justify-between mb-3">
-              <div><strong class="text-lg">Progresso por Projeto</strong><div class="text-sm text-muted">Status de implementação (%)</div></div>
-              <div class="text-xs text-muted">Para impressão</div>
-            </div>
-            <div id="chartBar" class="chart-area"></div>
-          </div>
-        </section>
-
-        <!-- DETALHES POR SISTEMA -->
-        <section id="tareffa" aria-labelledby="tareffa-heading" class="mt-8" data-aos="fade-right" data-aos-duration="700">
-          <h3 id="tareffa-heading" class="text-xl text-gold-400 font-bold mb-3">Tareffa — Status por Setor e Próximas Entregas</h3>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-gray-300 space-y-3" style="line-height:1.6">
-              <div><strong>Financeiro:</strong> Processo implementado e estável. O serviço de automação de boletos de honorários contábeis está funcionando corretamente, representando um ganho de eficiência.</div>
-              <div><strong>Legalização:</strong> O processo foi implementado com sucesso. A equipe está se adaptando bem e já utiliza as novas funcionalidades, incluindo os serviços de parcelamento via pasta ZIP, o que melhorou a organização.</div>
-              <div><strong>Contabilidade:</strong> O processo está criado, mas a adoção está baixa. A equipe não está movimentando o Kanban como esperado. É necessário realizar um novo treinamento para reforçar a importância e o método de uso.</div>
-              <div><strong>Fiscal:</strong> Há uma necessidade identificada de criar um processo específico para o setor. Uma reunião com Joice e Emerson será agendada para definir os requisitos e desenhar o fluxo de trabalho.</div>
-              <div><strong>Departamento Pessoal (DP):</strong> O processo base está criado, mas é preciso revisar as características e particularidades dos serviços para garantir que atendam plenamente às necessidades do departamento.</div>
-            </div>
-          </div>
-        </section>
-
-        <section id="agendamento" aria-labelledby="agendamento-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="agendamento-heading" class="text-xl text-gold-400 font-bold mb-3">Sistema de Agendamento — Descrição Técnica</h3>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-gray-300" style="line-height:1.6">
-              <p><strong>Motivação:</strong> Resolver conflitos de horário, fornecer controle de acesso por perfil e gerar relatórios gerenciais.</p>
-
-              <p><strong>Arquitetura técnica:</strong></p>
-              <ul class="list-disc list-inside text-gray-300">
-                <li><strong>Backend:</strong> Node.js + Express, banco SQLite (persistência local), autenticação JWT, criptografia com bcrypt.</li>
-                <li><strong>Frontend:</strong> HTML/CSS/JS (puro) com FullCalendar para visualização, Axios para chamadas AJAX e exportação de relatórios.</li>
-                <li><strong>Permissões:</strong> Usuários fixos (admin e departamentos). Admin vê/edita tudo; departamentos veem apenas suas reuniões com possibilidade de convidar outros departamentos.</li>
-              </ul>
-
-              <p><strong>Resultados:</strong> Redução significativa de conflitos, interface intuitiva e relatórios precisos. O sistema está implementado e é considerado estável.</p>
-            </div>
-          </div>
-        </section>
-
-        <section id="digisac" aria-labelledby="digisac-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="digisac-heading" class="text-xl text-gold-400 font-bold mb-3">DigiSac — Manutenção e Estratégia Atual</h3>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-gray-300" style="line-height:1.6">
-              <p>
-                O plano de migração dos chamados do DigiSac para o <strong>Tareffa Comunicação</strong> foi temporariamente paralisado. Após análise, concluiu-se que a integração atual não funcionaria de forma satisfatória para as necessidades da HDL. A mensalidade do módulo foi suspensa e foi demandada uma atualização ao fornecedor.
-              </p>
-              <p>
-                Até que uma solução viável seja apresentada, o <strong>DigiSac continuará sendo a ferramenta oficial de atendimento</strong>. Os setores (Financeiro, Legalização, DP, Fiscal) operam de forma satisfatória na plataforma, sem pendências críticas de chamados. A recomendação é melhorar o uso de <strong>tags</strong> para aprimorar a organização e a extração de métricas de atendimento.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section id="telefonia" aria-labelledby="telefonia-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="telefonia-heading" class="text-xl text-gold-400 font-bold mb-3">Telefonia IP — Implantação e Suporte</h3>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-gray-300" style="line-height:1.6">
-              <p>A Telefonia IP foi introduzida e configurada por Ronaldo (Sanfer). As atividades incluíram a instalação de softphones e testes de headsets. O sistema está estável e em uso contínuo, e a <strong>Sanfer é agora a responsável pela manutenção e suporte contínuo</strong> da infraestrutura.</p>
-            </div>
-          </div>
-        </section>
-
-        <section id="vector" aria-labelledby="vector-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
-          <h3 id="vector-heading" class="text-xl text-gold-400 font-bold mb-3">Vector / PDV — Em Produção e Melhoria Contínua</h3>
-
-          <div class="ui-card p-4 rounded-card">
-            <div class="text-gray-300" style="line-height:1.6">
-              <p>
-                O PDV foi desenvolvido e implantado com sucesso, estando agora acessível publicamente no endereço: <a href="https://pdv.wavegt.com.br/" target="_blank" class="text-gold-400 hover:underline">https://pdv.wavegt.com.br/</a>.
-                O trabalho atual foca na melhoria contínua e na adição de novas funcionalidades para torná-lo mais robusto e funcional.
-              </p>
-              <p>
-                O desenvolvimento continua com foco em atualizações, como o ajuste de regras tributárias e a otimização de endpoints da API. O projeto está <strong>95%</strong> concluído, com o roadmap focado em evoluções e não mais na implementação inicial.
-              </p>
-            </div>
-          </div>
-        </section>
-        
-        <!-- NEXT STEPS -->
-        <section id="next-steps" aria-labelledby="next-steps-heading" class="mt-8" data-aos="fade-up" data-aos-duration="700">
-          <h4 id="next-steps-heading" class="font-bold text-lg text-white">Observações & Próximos passos</h4>
-          <ul class="list-disc list-inside text-gray-300 space-y-1 mt-3" style="line-height: 1.6;">
-            <li>Agendar e realizar novo treinamento com a equipe de <strong>Contabilidade</strong> sobre o uso do Kanban no Tareffa.</li>
-            <li>Marcar reunião com Joice e Emerson para definir e criar o processo do setor <strong>Fiscal</strong> no Tareffa.</li>
-            <li>Revisar e ajustar os serviços do <strong>Departamento Pessoal</strong> no Tareffa para alinhamento fino com as operações.</li>
-            <li>Aguardar o posicionamento do fornecedor sobre as melhorias no <strong>Tareffa Comunicação</strong> antes de reavaliar a migração do DigiSac.</li>
-            <li>Configurar as rubricas financeiras e os modelos de documentos no sistema <strong>Quark</strong> assim que forem enviados por Aline (RH).</li>
-            <li>Continuar o ciclo de melhorias no <strong>PDV (Vector)</strong>, focando em usabilidade e novas funcionalidades baseadas no feedback inicial.</li>
-            <li>Otimizar o uso de <strong>tags no DigiSac</strong> para melhorar a categorização e análise dos atendimentos.</li>
-          </ul>
-        </section>
-
-        <footer class="mt-12 pt-6 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center text-sm text-muted gap-2">
-          <div>HDL Contabilidade — Relatório Técnico Interno</div>
-          <div>Assinado: <strong class="text-gray-100">Nicolas Gonçalves</strong> — Emitido em <span id="emitDateFooter" class="text-gray-100"></span></div>
-        </footer>
-      </article>
-    </main>
-  </div>
-
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-
-  <script>
-    function setupAccessibility() {
-      lucide.createIcons();
-      document.querySelectorAll('svg.lucide').forEach(icon => {
-        icon.setAttribute('aria-hidden', 'true');
-      });
-    }
-
-    function initializeApp() {
-      AOS.init({ once: true, duration: 700 });
-      setupAccessibility();
-
-      const dateStr = (new Date()).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
-      document.getElementById('emitDateTop').innerText = dateStr;
-      document.getElementById('emitDateFooter').innerText = dateStr;
-    }
-
-    initializeApp();
-  </script>
-
-  <script>
-    // Tema escuro padrão para todos os gráficos
-    const chartTheme = {
-      theme: {
-        mode: 'dark',
-        palette: 'palette1' // Usa a paleta de cores padrão do ApexCharts
-      }
-    };
+    <section id="digisac" aria-labelledby="digisac-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
+      <h3 id="digisac-heading" class="text-xl text-gold-400 font-bold mb-3">DigiSac e Tareffa Comunicação</h3>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-gray-300" style="line-height:1.6">
+          <p>O DigiSac permanece como a ferramenta oficial de atendimento, operando de forma estável. O plano de migração para o <strong>Tareffa Comunicação</strong> está pausado, aguardando uma atualização do fornecedor prometida para o dia <strong>12 de dezembro</strong>. Após essa data, a viabilidade da integração será reavaliada.</p>
+        </div>
+      </div>
+    </section>
     
-    // Mixed chart (bar + line)
-    const mixedOptions = {
-      chart: { type: 'line', height: 260, toolbar: { show:false }, animations: { enabled:true, easing: 'easeout', speed: 700 }, background: 'transparent' },
-      ...chartTheme,
-      series: [
-        { name: 'Progresso (%)', type: 'column', data: [30,45,55,65,75,85] },
-        { name: 'Satisfação (índice)', type: 'line', data: [60,66,70,75,80,84] }
-      ],
-      stroke: { width: [0,3], curve: 'smooth' },
-      plotOptions: { bar: { columnWidth: '48%', borderRadius: 6 }},
-      colors: ['#facc15','#ffffff'],
-      xaxis: { categories: ['Mai','Jun','Jul','Ago','Set','Out'] },
-      yaxis: [{ title: { text: 'Progresso (%)' }, min:0, max:100 }, { opposite: true, min:0, max:100, title: { text: 'Satisfação' }}],
-      legend: { horizontalAlign:'left' },
-      tooltip: { shared:true, intersect:false, theme: 'dark' }
-    };
-    new ApexCharts(document.querySelector("#chartMixed"), mixedOptions).render();
+    <section id="telefonia" aria-labelledby="telefonia-heading" class="mt-6" data-aos="fade-up" data-aos-duration="700">
+      <h3 id="telefonia-heading" class="text-xl text-gold-400 font-bold mb-3">Telefonia IP — Manutenção</h3>
+      <div class="ui-card p-4 rounded-card">
+        <div class="text-gray-300" style="line-height:1.6">
+          <p>A infraestrutura de Telefonia IP está estável e em uso contínuo por toda a equipe. A manutenção e o suporte técnico da solução são de responsabilidade da Sanfer.</p>
+        </div>
+      </div>
+    </section>
 
-    // Donut / distribution - ATUALIZADO
-    const donutOptions = {
-      chart: { type: 'donut', height: 260, background: 'transparent' },
-      ...chartTheme,
-      series: [90, 80, 30, 95, 95],
-      labels: ['Tareffa','HDL (Adoção)','RH (Quark)','Agendamento','Vector/PDV'],
-      colors: ['#f59e0b','#facc15','#60a5fa','#34d399','#f97316'],
-      legend: { position:'bottom' },
-      tooltip: { y: { formatter: val => val + '%' }, theme: 'dark' }
-    };
-    new ApexCharts(document.querySelector("#chartDonut"), donutOptions).render();
+    <!-- NEXT STEPS - ATUALIZADO -->
+    <section id="next-steps" aria-labelledby="next-steps-heading" class="mt-8" data-aos="fade-up" data-aos-duration="700">
+      <h4 id="next-steps-heading" class="font-bold text-lg text-white">Observações & Próximos passos</h4>
+      <ul class="list-disc list-inside text-gray-300 space-y-1 mt-3" style="line-height: 1.6;">
+        <li>Avançar no desenvolvimento do <strong>Sistema HDL Gestão</strong>, com foco na finalização da API e construção do dashboard interativo.</li>
+        <li>Definir e implementar a nova estrutura de Kanban para o setor de <strong>Legalização</strong> no Tareffa.</li>
+        <li>Analisar e desenvolver a funcionalidade de registro de faturamento direto no <strong>Vector/PDV</strong>.</li>
+        <li>Reavaliar a integração do <strong>Tareffa Comunicação</strong> após a atualização de 12/12 para decidir sobre a migração do DigiSac.</li>
+        <li>Acompanhar com Aline (RH) o progresso da inserção de dados no sistema <strong>Quark</strong>.</li>
+        <li>Agendar e realizar novo treinamento com a equipe de <strong>Contabilidade</strong> sobre o uso do Kanban no Tareffa.</li>
+      </ul>
+    </section>
 
-    // Radar - ATUALIZADO
-    const radarOptions = {
-      chart: { type: 'radar', height: 260, toolbar: { show: false }, background: 'transparent' },
-      ...chartTheme,
-      series: [{ name: 'Indicadores', data: [80,75,70,35,80] }], // Adoção, Automação, Readiness, Risco, Suporte
-      labels: ['Adoção','Automação','Readiness','Risco','Suporte'],
-      colors: ['#ef4444'],
-      yaxis: { min:0, max:100, labels: { formatter: (val) => val + '%' } },
-      tooltip: { theme: 'dark' },
-      markers: { size: 4 }
-    };
-    new ApexCharts(document.querySelector("#chartRadar"), radarOptions).render();
+    <footer class="mt-12 pt-6 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center text-sm text-muted gap-2">
+      <div>HDL Contabilidade — Relatório Técnico Interno</div>
+      <div>Assinado: <strong class="text-gray-100">Nicolas Gonçalves</strong> — Emitido em <span id="emitDateFooter" class="text-gray-100"></span></div>
+    </footer>
+  </article>
+</main>
+</div>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+function setupAccessibility() {
+lucide.createIcons();
+document.querySelectorAll('svg.lucide').forEach(icon => {
+icon.setAttribute('aria-hidden', 'true');
+});
+}
 
-    // Horizontal Bar - ATUALIZADO
-    const barOptions = {
-      chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent' },
-      ...chartTheme,
-      series: [{ name: 'Progresso', data: [90, 80, 30, 95, 95] }],
-      colors: ['#facc15'],
-      plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 6, dataLabels: { position: 'top' } }},
-      dataLabels: { enabled: true, offsetX: 40, style: { colors: ['#fff'] }, formatter: (val) => val + '%' },
-      xaxis: { categories: ['Tareffa','HDL (Adoção)','RH (Quark)','Agendamento','Vector/PDV'], max:100, labels: { show: false } },
-      tooltip: { theme: 'dark' }
-    };
-    new ApexCharts(document.querySelector("#chartBar"), barOptions).render();
-  </script>
+function initializeApp() {
+AOS.init({ once: true, duration: 700 });
+setupAccessibility();
 
-  <script>
-    function exportReportToPDF(triggerBtn) {
-      const element = document.getElementById('report-content');
-      const clone = element.cloneNode(true);
+const dateStr = (new Date()).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+document.getElementById('emitDateTop').innerText = dateStr;
+document.getElementById('emitDateFooter').innerText = dateStr;
+}
 
-      const container = document.createElement('div');
-      container.style.position = 'fixed';
-      container.style.left = '-9999px';
-      container.style.top = '0';
-      container.style.width = '1200px'; 
-      container.appendChild(clone);
-      document.body.appendChild(container);
+initializeApp();
+</script>
+<script>
+const chartTheme = {
+theme: { mode: 'dark', palette: 'palette1' }
+};
 
-      const filename = `Relatorio-HDL-2025_Tecnico_${(new Date()).toISOString().slice(0,10)}.pdf`;
-      const opt = {
-        margin:       [10, 10, 10, 10],
-        filename:     filename,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#0f1724' },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+const mixedOptions = {
+chart: { type: 'line', height: 260, toolbar: { show:false }, animations: { enabled:true, easing: 'easeout', speed: 700 }, background: 'transparent' },
+...chartTheme,
+series: [
+{ name: 'Progresso (%)', type: 'column', data: [30,45,55,65,75,85] },
+{ name: 'Satisfação (índice)', type: 'line', data: [60,66,70,75,80,84] }
+],
+stroke: { width: [0,3], curve: 'smooth' },
+plotOptions: { bar: { columnWidth: '48%', borderRadius: 6 }},
+colors: ['#facc15','#ffffff'],
+xaxis: { categories: ['Mai','Jun','Jul','Ago','Set','Out'] },
+yaxis: [{ title: { text: 'Progresso (%)' }, min:0, max:100 }, { opposite: true, min:0, max:100, title: { text: 'Satisfação' }}],
+legend: { horizontalAlign:'left' },
+tooltip: { shared:true, intersect:false, theme: 'dark' }
+};
+new ApexCharts(document.querySelector("#chartMixed"), mixedOptions).render();
 
-      if (triggerBtn) { 
-        triggerBtn.disabled = true; 
-        triggerBtn.innerText = 'Gerando PDF...'; 
-      }
+// Donut / distribution - ATUALIZADO
+const donutOptions = {
+chart: { type: 'donut', height: 260, background: 'transparent' },
+...chartTheme,
+series: [95, 90, 80, 35, 30],
+labels: ['Vector/PDV', 'Tareffa', 'HDL (Adoção)', 'HDL Gestão', 'RH (Quark)'],
+colors: ['#f97316', '#f59e0b','#facc15', '#34d399', '#60a5fa'],
+legend: { position:'bottom' },
+tooltip: { y: { formatter: val => val + '%' }, theme: 'dark' }
+};
+new ApexCharts(document.querySelector("#chartDonut"), donutOptions).render();
 
-      html2pdf().set(opt).from(clone).save()
-        .then(() => {
-          document.body.removeChild(container);
-        })
-        .catch(err => {
-          console.error('Erro export:', err);
-          document.body.removeChild(container);
-          alert('Erro ao gerar PDF. Veja console.');
-        })
-        .finally(() => {
-          if (triggerBtn) { 
-            setTimeout(() => { 
-              triggerBtn.disabled = false; 
-              triggerBtn.innerText = 'Exportar PDF'; 
-            }, 1200); 
-          }
-        });
-    }
+// Radar - Mantido
+const radarOptions = {
+chart: { type: 'radar', height: 260, toolbar: { show: false }, background: 'transparent' },
+...chartTheme,
+series: [{ name: 'Indicadores', data: [80,75,70,35,80] }],
+labels: ['Adoção','Automação','Readiness','Risco','Suporte'],
+colors: ['#ef4444'],
+yaxis: { min:0, max:100, labels: { formatter: (val) => val + '%' } },
+tooltip: { theme: 'dark' },
+markers: { size: 4 }
+};
+new ApexCharts(document.querySelector("#chartRadar"), radarOptions).render();
 
-    document.getElementById('btnExportApp').addEventListener('click', function(){ exportReportToPDF(this); });
+// Horizontal Bar - ATUALIZADO
+const barOptions = {
+chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent' },
+...chartTheme,
+series: [{ name: 'Progresso', data: [95, 90, 80, 35, 30] }],
+colors: ['#facc15'],
+plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 6, dataLabels: { position: 'top' } }},
+dataLabels: { enabled: true, offsetX: 40, style: { colors: ['#fff'] }, formatter: (val) => val + '%' },
+xaxis: { categories: ['Vector/PDV', 'Tareffa', 'HDL (Adoção)', 'HDL Gestão', 'RH (Quark)'], max:100, labels: { show: false } },
+tooltip: { theme: 'dark' }
+};
+new ApexCharts(document.querySelector("#chartBar"), barOptions).render();
+</script>
+<script>
+function exportReportToPDF(triggerBtn) {
+const element = document.getElementById('report-content');
+const clone = element.cloneNode(true);
 
-    window.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
-        e.preventDefault();
-        const btn = document.getElementById('btnExportApp');
-        if (!btn.disabled) {
-          exportReportToPDF(btn);
-        }
-      }
-    });
-  </script>
+const container = document.createElement('div');
+container.style.position = 'fixed';
+container.style.left = '-9999px';
+container.style.top = '0';
+container.style.width = '1200px';
+container.appendChild(clone);
+document.body.appendChild(container);
+
+const filename = `Relatorio-HDL-2025_Tecnico_${(new Date()).toISOString().slice(0,10)}.pdf`;
+const opt = {
+margin: [10, 10, 10, 10],
+filename: filename,
+image: { type: 'jpeg', quality: 0.98 },
+html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#0f1724' },
+jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+};
+
+if (triggerBtn) {
+triggerBtn.disabled = true;
+triggerBtn.innerText = 'Gerando PDF...';
+}
+
+html2pdf().set(opt).from(clone).save()
+.then(() => {
+document.body.removeChild(container);
+})
+.catch(err => {
+console.error('Erro export:', err);
+document.body.removeChild(container);
+alert('Erro ao gerar PDF. Veja console.');
+})
+.finally(() => {
+if (triggerBtn) {
+setTimeout(() => {
+triggerBtn.disabled = false;
+triggerBtn.innerText = 'Exportar PDF';
+}, 1200);
+}
+});
+}
+
+document.getElementById('btnExportApp').addEventListener('click', function(){ exportReportToPDF(this); });
+
+window.addEventListener('keydown', (e) => {
+if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'e') {
+e.preventDefault();
+const btn = document.getElementById('btnExportApp');
+if (!btn.disabled) {
+exportReportToPDF(btn);
+}
+}
+});
+</script>
 </body>
 </html>
