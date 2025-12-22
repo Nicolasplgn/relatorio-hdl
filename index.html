@@ -19,11 +19,11 @@
         extend: {
           colors: {
             gold: { 400: '#facc15', 500: '#f59e0b', 700: '#b45309' },
-            'dark-100': '#0C0C12', // Fundo principal mais escuro
-            'dark-200': '#15151F', // Fundo de cards, ligeiramente mais claro
-            'gray-text': '#C0C0C0', // Texto principal suave
-            'gray-muted': '#7B7B87', // Texto secundário e muted
-            'accent-blue': '#4ECDC4', // Novo acento azul/verde para contraste
+            'dark-100': '#0C0C12',
+            'dark-200': '#15151F',
+            'gray-text': '#C0C0C0',
+            'gray-muted': '#7B7B87',
+            'accent-blue': '#4ECDC4',
             'status-success': '#10B981',
             'status-warning': '#F59E0B',
             'status-danger': '#EF4444',
@@ -59,7 +59,7 @@
     }
     .ui-card::before {
         content: ''; position: absolute; inset: 0;
-        border-radius: inherit; padding: 1px; /* Espessura da borda "glow" */
+        border-radius: inherit; padding: 1px;
         background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(245, 158, 11, 0.2), transparent 40%);
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
@@ -89,14 +89,6 @@
     ::-webkit-scrollbar-track { background: #0C0C12; }
     ::-webkit-scrollbar-thumb { background: #3A3A4A; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #4ECDC4; }
-
-    @media print {
-      body { background: #fff; color: #000; background-image: none; }
-      .ui-card { border: 1px solid #ddd; background: #fff; box-shadow: none; }
-      .text-gray-text, .text-gray-muted, .text-gold-400 { color: #333 !important; }
-      .text-white { color: #000 !important; }
-      aside, #btnExportApp { display: none; }
-    }
   </style>
 </head>
 <body class="bg-dark-100 text-gray-text">
@@ -122,12 +114,6 @@
       <a href="#vector-ecosystem" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="network" class="w-5 h-5"></i> Ecossistema Vector</a>
       <a href="#future-outlook" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="trending-up" class="w-5 h-5"></i> Visão de Futuro</a>
     </nav>
-
-    <div class="mt-auto pt-8 border-t border-[#2A2A3A]">
-      <button id="btnExportApp" class="w-full py-3 bg-gold-500 hover:bg-gold-400 text-black font-bold rounded-lg shadow-light-glow transition-all text-base flex items-center justify-center gap-2">
-        <i data-lucide="file-text" class="w-5 h-5"></i> Exportar PDF
-      </button>
-    </div>
   </aside>
 
   <!-- Main Content -->
@@ -429,7 +415,6 @@
 <!-- JS Libraries and Custom Script -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script>
   // Inicialização de Lucide Icons e AOS
   document.addEventListener('DOMContentLoaded', () => {
@@ -487,31 +472,6 @@
     legend: { show: true, position: 'bottom', labels: { colors: '#C0C0C0' }, markers: { radius: 12 }, itemMargin: { horizontal: 10 } },
   };
   new ApexCharts(document.querySelector("#chartEffort"), effortOptions).render();
-
-  // Lógica de Exportação para PDF
-  document.getElementById('btnExportApp').addEventListener('click', function() {
-    const element = document.getElementById('report-content');
-    const btn = this;
-    const originalText = btn.innerHTML;
-    
-    btn.disabled = true;
-    btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Gerando PDF...';
-    lucide.createIcons(); // Recriar ícones para o loader
-
-    const opt = {
-      margin: [10, 10, 10, 10],
-      filename: `Relatorio_Performance_HDL_2025_${new Date().toISOString().slice(0,10)}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, backgroundColor: '#0C0C12', logging: false },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opt).from(element).save().finally(() => {
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-      lucide.createIcons(); // Recriar ícones originais
-    });
-  });
 </script>
 
 </body>
