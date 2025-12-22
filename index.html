@@ -164,9 +164,9 @@
           </div>
         </div>
         <div class="ui-card p-6 rounded-card flex items-center gap-4">
-          <div class="w-12 h-12 flex items-center justify-center rounded-full bg-status-warning/15 text-status-warning flex-shrink-0"><i data-lucide="tool" class="w-6 h-6"></i></div>
+          <div class="w-12 h-12 flex items-center justify-center rounded-full bg-status-warning/15 text-status-warning flex-shrink-0"><i data-lucide="shopping-cart" class="w-6 h-6"></i></div>
           <div>
-            <div class="text-gray-muted text-sm font-medium">Vector PDV</div>
+            <div class="text-gray-muted text-sm font-medium">Projeto PDV</div>
             <div class="text-white font-heading font-bold text-3xl mt-1">95<span class="text-xl">%</span></div>
           </div>
         </div>
@@ -196,7 +196,7 @@
       <!-- Charts Section -->
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-8" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
         <div class="ui-card p-6 rounded-card">
-          <h3 class="font-heading text-xl text-white font-bold mb-5">Maturidade do Ecossistema HDL</h3>
+          <h3 class="font-heading text-xl text-white font-bold mb-5">Maturidade dos Projetos</h3>
           <div id="chartMaturity" class="chart-area"></div>
         </div>
         <div class="ui-card p-6 rounded-card">
@@ -241,11 +241,11 @@
           </div>
         </div>
 
-        <!-- Project: Vector PDV -->
-        <div id="vector" class="ui-card p-8 rounded-card">
+        <!-- Project: PDV -->
+        <div id="pdv-project" class="ui-card p-8 rounded-card">
           <div class="flex items-center gap-4 mb-5">
             <i data-lucide="shopping-cart" class="w-8 h-8 text-gold-400"></i>
-            <h3 class="font-heading text-2xl text-white font-bold">Vector PDV: Evolução Contínua</h3>
+            <h3 class="font-heading text-2xl text-white font-bold">Projeto PDV: Evolução Contínua</h3>
             <span class="ml-auto px-4 py-1.5 rounded-full bg-status-warning/15 text-status-warning text-sm font-semibold border border-status-warning/30">Bloqueado API</span>
           </div>
           <p class="text-gray-text leading-relaxed text-lg mb-6">
@@ -276,7 +276,7 @@
         <div class="section-divider"></div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div class="ui-card p-8 rounded-card">
-            <h3 class="font-heading text-2xl text-white font-bold mb-4">Adoção e Processos</h3>
+            <h3 class="font-heading text-2xl text-white font-bold mb-4">Adoção e Processos por Setor</h3>
             <div class="space-y-5 text-gray-text">
               <div class="flex items-start gap-4">
                 <i data-lucide="trending-up" class="w-6 h-6 text-status-success flex-shrink-0"></i>
@@ -381,7 +381,7 @@
             <ul class="list-disc list-inside space-y-2 text-base">
               <li><strong>SCE (Stars Control Enterprises):</strong> Avançar no desenvolvimento, focado na reunião de integração com a Questor e formalização da parceria.</li>
               <li><strong>Tareffa Comunicação:</strong> Testar e integrar o módulo de comunicação o mais rápido possível, aproveitando novas funcionalidades como a cobrança automática de arquivos.</li>
-              <li><strong>Vector PDV:</strong> Finalizar a implementação da funcionalidade de faturamento direto assim que a API for liberada.</li>
+              <li><strong>Projeto PDV:</strong> Finalizar a implementação da funcionalidade de faturamento direto assim que a API for liberada.</li>
               <li><strong>Tareffa (Manutenção):</strong> Realizar treinamentos adicionais para a Contabilidade e reparametrização urgente do Departamento Pessoal.</li>
               <li><strong>Quark RH:</strong> Continuar o acompanhamento do RH da HDL para garantir a plena utilização do sistema.</li>
             </ul>
@@ -434,10 +434,10 @@
     series: [{ name: 'Maturidade', data: [95, 90, 80, 25] }],
     chart: { ...chartOptionsBase.chart, type: 'bar', height: 280 },
     plotOptions: { bar: { borderRadius: 6, horizontal: true, distributed: true, barHeight: '60%' } },
-    colors: ['#f59e0b', '#4ECDC4', '#60A5FA', '#facc15'], // Cores personalizadas
+    colors: ['#f59e0b', '#4ECDC4', '#60A5FA', '#facc15'],
     dataLabels: { enabled: true, textAnchor: 'start', style: { colors: ['#0C0C12'], fontSize: '14px', fontWeight: 'bold' }, formatter: (val) => val + "%", offsetX: 15 },
     xaxis: { 
-      categories: ['Vector PDV', 'Tareffa', 'Quark RH', 'SCE (SaaS)'], 
+      categories: ['Projeto PDV', 'Tareffa', 'Quark RH', 'SCE (SaaS)'], 
       labels: { style: { colors: '#7B7B87', fontFamily: 'Inter' } }, 
       max: 100, axisBorder: { show: false }, axisTicks: { show: false } 
     },
@@ -451,9 +451,9 @@
   const effortOptions = {
     ...chartOptionsBase,
     series: [50, 20, 20, 10],
-    labels: ['SCE (SaaS)', 'Vector PDV', 'Tareffa', 'Suporte Geral'],
+    labels: ['SCE (SaaS)', 'Projeto PDV', 'Tareffa', 'Suporte Geral'],
     chart: { ...chartOptionsBase.chart, type: 'donut', height: 300 },
-    colors: ['#4ECDC4', '#f59e0b', '#60A5FA', '#7B7B87'], // Cores personalizadas
+    colors: ['#4ECDC4', '#f59e0b', '#60A5FA', '#7B7B87'],
     stroke: { show: true, colors: ['#15151F'], width: 5 },
     dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%', style: { colors: ['#0C0C12'], fontSize: '14px', fontWeight: 'bold' } },
     legend: { show: true, position: 'bottom', labels: { colors: '#C0C0C0' }, markers: { radius: 12 }, itemMargin: { horizontal: 10 } },
