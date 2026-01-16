@@ -1,478 +1,538 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark" style="scroll-behavior: smooth;">
+<html lang="pt-BR" class="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Relatório de Performance Estratégica HDL — 2025</title>
+  <title>HDL & Vector | Strategic Command Dashboard</title>
   
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-
+  <!-- Alpine.js (Para interatividade das abas e estados) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- ApexCharts -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Ícones -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
           colors: {
-            gold: { 400: '#facc15', 500: '#f59e0b', 700: '#b45309' },
-            'dark-100': '#0C0C12',
-            'dark-200': '#15151F',
-            'gray-text': '#C0C0C0',
-            'gray-muted': '#7B7B87',
-            'accent-blue': '#4ECDC4',
-            'status-success': '#10B981',
-            'status-warning': '#F59E0B',
-            'status-danger': '#EF4444',
-            'status-info': '#60A5FA',
+            bg: {
+              main: '#09090b',
+              card: '#121217',
+              hover: '#1c1c24'
+            },
+            accent: {
+              gold: '#fbbf24',
+              blue: '#3b82f6',
+              purple: '#8b5cf6',
+              red: '#ef4444',
+              green: '#10b981'
+            }
           },
-          fontFamily: { 
-            'sans': ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-            'heading': ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'] 
-          },
-          borderRadius: { 'card': '16px' },
           boxShadow: {
-            'light-glow': '0 0 15px rgba(255, 255, 255, 0.08)',
-          },
+            'neon-gold': '0 0 10px rgba(251, 191, 36, 0.2)',
+            'neon-blue': '0 0 10px rgba(59, 130, 246, 0.2)',
+          }
         }
       }
     }
   </script>
+
   <style>
-    html { background: #0C0C12; }
-    body {
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased; 
-      color: #C0C0C0;
-      background: radial-gradient(circle at 15% 15%, rgba(245, 158, 11, 0.08) 0%, transparent 25%),
-                  radial-gradient(circle at 85% 85%, rgba(78, 205, 196, 0.08) 0%, transparent 25%);
+    /* Estilos globais e scrollbar */
+    body { background-color: #09090b; color: #e4e4e7; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    
+    /* Efeito Glass */
+    .glass-panel {
+      background: rgba(18, 18, 23, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
-    .ui-card {
-      background: #15151F;
-      border: 1px solid #2A2A3A;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      transition: all .3s ease-out;
-      position: relative;
+    
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, transparent 100%);
+      border-left: 3px solid #fbbf24;
+      color: #fbbf24;
     }
-    .ui-card::before {
-        content: ''; position: absolute; inset: 0;
-        border-radius: inherit; padding: 1px;
-        background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(245, 158, 11, 0.2), transparent 40%);
-        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        opacity: 0;
-        transition: opacity 0.3s ease-out;
-        pointer-events: none;
-        z-index: 1;
-    }
-    .ui-card:hover::before { opacity: 1; }
-    .ui-card:hover { 
-      transform: translateY(-8px);
-      border-color: #f59e0b;
-      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.15), 0 4px 20px rgba(0,0,0,0.4);
-    }
-    .brand-logo {
-      background: linear-gradient(45deg, #facc15, #f59e0b);
-      box-shadow: 0 6px 15px rgba(245, 158, 11, 0.25);
-    }
-    .section-divider {
-      height: 2px; width: 60px; margin-top: 1rem; margin-bottom: 2.5rem;
-      background: linear-gradient(90deg, #f59e0b, #4ECDC4);
-      border-radius: 1px;
-    }
-    .chart-area { min-height: 280px; }
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #0C0C12; }
-    ::-webkit-scrollbar-thumb { background: #3A3A4A; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #4ECDC4; }
+
+    [x-cloak] { display: none !important; }
   </style>
 </head>
-<body class="bg-dark-100 text-gray-text">
 
-<div class="flex min-h-screen">
-  
+<body class="h-screen flex overflow-hidden selection:bg-accent-gold selection:text-black" x-data="{ currentTab: 'overview', sidebarOpen: true, notificationsOpen: false }">
+
   <!-- Sidebar -->
-  <aside class="w-64 p-6 hidden lg:flex flex-col border-r border-[#2A2A3A] bg-dark-200 fixed h-full z-10">
-    <div class="flex items-center gap-4 mb-12">
-      <div class="w-12 h-12 rounded-lg flex items-center justify-center text-black font-extrabold text-xl brand-logo">H</div>
-      <div>
-        <div class="text-white font-heading font-bold text-lg">HDL CONT.</div>
-        <div class="text-gray-muted text-xs uppercase tracking-wider mt-0.5">Relatório Anual 2025</div>
+  <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="flex-shrink-0 border-r border-white/10 bg-bg-card flex flex-col transition-all duration-300 z-20 relative">
+    <div class="h-16 flex items-center justify-center border-b border-white/5 relative">
+      <div class="flex items-center gap-3" x-show="sidebarOpen" x-transition>
+        <div class="w-8 h-8 rounded bg-gradient-to-tr from-accent-gold to-orange-600 flex items-center justify-center text-black font-bold font-mono">H</div>
+        <span class="font-bold tracking-wider text-sm">HDL SYSTEM</span>
+      </div>
+      <div x-show="!sidebarOpen" class="w-8 h-8 rounded bg-gradient-to-tr from-accent-gold to-orange-600 flex items-center justify-center text-black font-bold font-mono">H</div>
+      
+      <!-- Toggle Sidebar -->
+      <button @click="sidebarOpen = !sidebarOpen" class="absolute -right-3 top-6 w-6 h-6 bg-accent-gold rounded-full flex items-center justify-center text-black shadow-neon-gold hover:scale-110 transition-transform">
+        <i data-lucide="chevron-left" class="w-4 h-4 transition-transform" :class="!sidebarOpen && 'rotate-180'"></i>
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 py-6 space-y-1 overflow-y-auto">
+      <p x-show="sidebarOpen" class="px-6 text-xs font-mono text-gray-500 mb-2 uppercase">Módulos</p>
+      
+      <a href="#" @click.prevent="currentTab = 'overview'" :class="currentTab === 'overview' ? 'active' : 'text-gray-400 hover:text-white hover:bg-white/5'" class="nav-item flex items-center gap-3 px-6 py-3 transition-all group">
+        <i data-lucide="layout-grid" class="w-5 h-5 group-hover:text-accent-gold transition-colors"></i>
+        <span x-show="sidebarOpen" class="font-medium text-sm">Visão Geral</span>
+      </a>
+
+      <a href="#" @click.prevent="currentTab = 'hdl'" :class="currentTab === 'hdl' ? 'active' : 'text-gray-400 hover:text-white hover:bg-white/5'" class="nav-item flex items-center gap-3 px-6 py-3 transition-all group">
+        <i data-lucide="building-2" class="w-5 h-5 group-hover:text-accent-blue transition-colors"></i>
+        <span x-show="sidebarOpen" class="font-medium text-sm">HDL Operações</span>
+      </a>
+
+      <a href="#" @click.prevent="currentTab = 'dev'" :class="currentTab === 'dev' ? 'active' : 'text-gray-400 hover:text-white hover:bg-white/5'" class="nav-item flex items-center gap-3 px-6 py-3 transition-all group">
+        <i data-lucide="code-2" class="w-5 h-5 group-hover:text-accent-purple transition-colors"></i>
+        <span x-show="sidebarOpen" class="font-medium text-sm">Hub & Vector</span>
+      </a>
+
+      <a href="#" @click.prevent="currentTab = 'roadmap'" :class="currentTab === 'roadmap' ? 'active' : 'text-gray-400 hover:text-white hover:bg-white/5'" class="nav-item flex items-center gap-3 px-6 py-3 transition-all group">
+        <i data-lucide="target" class="w-5 h-5 group-hover:text-accent-green transition-colors"></i>
+        <span x-show="sidebarOpen" class="font-medium text-sm">Metas & Roadmap</span>
+      </a>
+    </nav>
+
+    <!-- User Profile -->
+    <div class="p-4 border-t border-white/5">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gray-800 border border-gray-600 flex items-center justify-center">
+          <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
+        </div>
+        <div x-show="sidebarOpen">
+          <p class="text-sm font-bold text-white">Nicolas</p>
+          <p class="text-xs text-gray-500">Tech Lead / Dev</p>
+        </div>
       </div>
     </div>
-    
-    <nav class="space-y-2 text-gray-muted font-medium flex-1">
-      <a href="#overview" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Visão Geral</a>
-      <a href="#accomplishments" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="sparkles" class="w-5 h-5"></i> Conquistas 2025</a>
-      <a href="#projects-focus" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="rocket" class="w-5 h-5"></i> Projetos em Foco</a>
-      <a href="#tareffa-status" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="server" class="w-5 h-5"></i> Status Tareffa</a>
-      <a href="#legacy-systems" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="archive" class="w-5 h-5"></i> Sistemas Legado</a>
-      <a href="#vector-ecosystem" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="network" class="w-5 h-5"></i> Ecossistema Vector</a>
-      <a href="#future-outlook" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-[#2A2A3A] hover:text-white transition-colors"><i data-lucide="trending-up" class="w-5 h-5"></i> Visão de Futuro</a>
-    </nav>
   </aside>
 
-  <!-- Main Content -->
-  <main class="flex-1 p-8 lg:p-12 lg:ml-64">
-    <article id="report-content" class="max-w-6xl mx-auto space-y-16">
+  <!-- Main Area -->
+  <main class="flex-1 flex flex-col min-w-0 bg-bg-main relative">
+    
+    <!-- Top Header -->
+    <header class="h-16 glass-panel border-b border-white/5 flex items-center justify-between px-8 z-10">
+      <div>
+        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+          <span class="text-accent-gold">//</span> Status Report
+          <span class="text-xs font-mono text-gray-500 bg-white/5 px-2 py-0.5 rounded border border-white/10">v.2025.12</span>
+        </h2>
+      </div>
 
-      <!-- Header Section -->
-      <header class="text-center lg:text-left" data-aos="fade-down" data-aos-duration="800">
-        <h1 class="font-heading text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-          Relatório de Performance <span class="text-gold-400">Estratégica</span>
-        </h1>
-        <p class="text-gray-text text-lg mt-4 max-w-4xl lg:mx-0 mx-auto">
-          Uma retrospectiva aprofundada das conquistas, inovações e do progresso tecnológico que marcaram o ano de 2025 na HDL Contabilidade.
-        </p>
-        <div class="mt-8 text-gray-muted text-sm flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-2 sm:gap-6">
-            <div><strong class="text-white">Data de Emissão:</strong> Dezembro 2025</div>
-            <div><strong class="text-white">Responsável:</strong> Nicolas</div>
-        </div>
-      </header>
-
-      <!-- Overview KPIs -->
-      <section id="overview" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
-        <div class="ui-card p-6 rounded-card flex items-center gap-4">
-          <div class="w-12 h-12 flex items-center justify-center rounded-full bg-status-info/15 text-status-info flex-shrink-0"><i data-lucide="check-circle" class="w-6 h-6"></i></div>
-          <div>
-            <div class="text-gray-muted text-sm font-medium">Tareffa (Adoção)</div>
-            <div class="text-white font-heading font-bold text-3xl mt-1">90<span class="text-xl">%</span></div>
-          </div>
-        </div>
-        <div class="ui-card p-6 rounded-card flex items-center gap-4">
-          <div class="w-12 h-12 flex items-center justify-center rounded-full bg-status-info/15 text-status-info flex-shrink-0"><i data-lucide="users" class="w-6 h-6"></i></div>
-          <div>
-            <div class="text-gray-muted text-sm font-medium">Quark RH (Setup)</div>
-            <div class="text-white font-heading font-bold text-3xl mt-1">~80<span class="text-xl">%</span></div>
-          </div>
-        </div>
-        <div class="ui-card p-6 rounded-card flex items-center gap-4">
-          <div class="w-12 h-12 flex items-center justify-center rounded-full bg-status-warning/15 text-status-warning flex-shrink-0"><i data-lucide="shopping-cart" class="w-6 h-6"></i></div>
-          <div>
-            <div class="text-gray-muted text-sm font-medium">Projeto PDV</div>
-            <div class="text-white font-heading font-bold text-3xl mt-1">95<span class="text-xl">%</span></div>
-          </div>
-        </div>
-        <div class="ui-card p-6 rounded-card flex items-center gap-4">
-          <div class="w-12 h-12 flex items-center justify-center rounded-full bg-accent-blue/15 text-accent-blue flex-shrink-0"><i data-lucide="code" class="w-6 h-6"></i></div>
-          <div>
-            <div class="text-gray-muted text-sm font-medium">SCE (SaaS)</div>
-            <div class="text-white font-heading font-bold text-3xl mt-1">25<span class="text-xl">%</span></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Accomplishments -->
-      <section id="accomplishments" data-aos="fade-up" data-aos-duration="800">
-        <h2 class="font-heading text-3xl text-white font-bold">Conquistas Transformadoras de 2025</h2>
-        <div class="section-divider"></div>
-        <div class="ui-card p-8 rounded-card max-w-5xl mx-auto lg:mx-0">
-          <p class="text-gray-text leading-relaxed text-lg">
-            O ano de 2025 foi um período de metamorfose para a HDL Contabilidade. Movemos a agulha de um cenário com baixa padronização e sistemas subutilizados para um ecossistema digital robusto e eficiente.
-          </p>
-          <blockquote class="border-l-4 border-gold-500 pl-6 py-4 mt-6 italic text-lg font-medium text-gold-400">
-            "Este ano, o trabalho em desenvolvimento, padronização e processos superou amplamente as expectativas, gerando uma melhoria que reflete um salto qualitativo incomparável."
-          </blockquote>
-        </div>
-      </section>
-
-      <!-- Charts Section -->
-      <section class="grid grid-cols-1 lg:grid-cols-2 gap-8" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
-        <div class="ui-card p-6 rounded-card">
-          <h3 class="font-heading text-xl text-white font-bold mb-5">Maturidade dos Projetos</h3>
-          <div id="chartMaturity" class="chart-area"></div>
-        </div>
-        <div class="ui-card p-6 rounded-card">
-          <h3 class="font-heading text-xl text-white font-bold mb-5">Alocação de Esforço em Desenvolvimento</h3>
-          <div id="chartEffort" class="chart-area"></div>
-        </div>
-      </section>
-
-      <!-- Projects in Focus -->
-      <section id="projects-focus" data-aos="fade-up" data-aos-duration="800">
-        <h2 class="font-heading text-3xl text-white font-bold">Projetos em Foco e Evolução</h2>
-        <div class="section-divider"></div>
-
-        <!-- Project: SCE (Stars Control Enterprises) -->
-        <div class="ui-card p-8 rounded-card mb-8">
-          <div class="flex items-center gap-4 mb-5">
-            <i data-lucide="star" class="w-8 h-8 text-accent-blue"></i>
-            <h3 class="font-heading text-2xl text-white font-bold">SCE: Stars Control Enterprises (Novo SaaS)</h3>
-            <span class="ml-auto px-4 py-1.5 rounded-full bg-accent-blue/15 text-accent-blue text-sm font-semibold border border-accent-blue/30">Em Desenvolvimento</span>
-          </div>
-          <p class="text-gray-text leading-relaxed text-lg mb-6">
-            O SCE representa um projeto de autoria e inovação, uma plataforma robusta de controle e gestão empresarial desenvolvida sem auxílio externo. Este SaaS marca um avanço estratégico significativo para a Vector.
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-text">
-            <div>
-              <h4 class="font-heading text-xl text-white font-semibold mb-3">Status e Próximas Etapas</h4>
-              <ul class="list-disc list-inside space-y-2 text-sm">
-                <li><strong>Aguardando Integração Questor:</strong> Próxima etapa crucial. A reunião para definir a integração técnica é fundamental para o avanço do projeto.</li>
-                <li><strong>Validação com a Liderança:</strong> Apresentar o modelo de negócio e escopo técnico validado aos gestores para alinhamento estratégico.</li>
-                <li><strong>Formalização da Parceria:</strong> Discutir o valor do desenvolvimento e o modelo de autoria/parceria, consolidando a estrutura do projeto.</li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-heading text-xl text-white font-semibold mb-3">Impacto Esperado</h4>
-              <ul class="list-disc list-inside space-y-2 text-sm">
-                <li>Automatização de processos financeiros e contábeis.</li>
-                <li>Geração de insights estratégicos para clientes.</li>
-                <li>Posicionamento da Vector como líder em inovação tecnológica.</li>
-                <li>Expansão do portfólio de produtos com soluções de alto valor agregado.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- Project: PDV -->
-        <div id="pdv-project" class="ui-card p-8 rounded-card">
-          <div class="flex items-center gap-4 mb-5">
-            <i data-lucide="shopping-cart" class="w-8 h-8 text-gold-400"></i>
-            <h3 class="font-heading text-2xl text-white font-bold">Projeto PDV: Evolução Contínua</h3>
-            <span class="ml-auto px-4 py-1.5 rounded-full bg-status-warning/15 text-status-warning text-sm font-semibold border border-status-warning/30">Bloqueado API</span>
-          </div>
-          <p class="text-gray-text leading-relaxed text-lg mb-6">
-            O PDV foi atualizado para uma versão empresarial com novas e robustas funcionalidades. Atualmente, o sistema está funcional, mas o próximo grande passo — a integração do <strong>faturamento direto</strong> — está em espera.
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-text">
-            <div>
-              <h4 class="font-heading text-xl text-white font-semibold mb-3">Status e Desafios</h4>
-              <ul class="list-disc list-inside space-y-2 text-sm">
-                <li><strong>Em Produção:</strong> Versão atual estável e em uso.</li>
-                <li><strong>Bloqueio Atual:</strong> A implementação do faturamento direto depende da finalização da API de faturamento por Fabricio.</li>
-              </ul>
-            </div>
-            <div>
-              <h4 class="font-heading text-xl text-white font-semibold mb-3">Próximos Passos</h4>
-              <ul class="list-disc list-inside space-y-2 text-sm">
-                <li>Implementar a funcionalidade de faturamento direto assim que a API for liberada.</li>
-                <li>Oferecer ao cliente a escolha entre venda como "Pedido" ou "Faturamento Direto".</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tareffa Status -->
-      <section id="tareffa-status" data-aos="fade-up" data-aos-duration="800">
-        <h2 class="font-heading text-3xl text-white font-bold">Status Detalhado: Tareffa & Comunicação</h2>
-        <div class="section-divider"></div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="ui-card p-8 rounded-card">
-            <h3 class="font-heading text-2xl text-white font-bold mb-4">Adoção e Processos por Setor</h3>
-            <div class="space-y-5 text-gray-text">
-              <div class="flex items-start gap-4">
-                <i data-lucide="trending-up" class="w-6 h-6 text-status-success flex-shrink-0"></i>
-                <div>
-                  <h4 class="font-heading text-lg font-semibold text-white">Financeiro & Legalização</h4>
-                  <p class="text-sm mt-1">Operando de forma estável e satisfatória, com equipes bem adaptadas aos novos processos. <span class="text-status-success font-semibold">Consolidado.</span></p>
-                </div>
+      <div class="flex items-center gap-4">
+        <!-- Notification Bell with Alert -->
+        <div class="relative" @click="notificationsOpen = !notificationsOpen">
+          <button class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
+            <i data-lucide="bell" class="w-5 h-5 text-gray-300"></i>
+            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-accent-red rounded-full animate-pulse"></span>
+          </button>
+          
+          <!-- Dropdown Notificações -->
+          <div x-show="notificationsOpen" @click.away="notificationsOpen = false" x-transition.origin.top.right class="absolute right-0 top-12 w-80 bg-bg-card border border-white/10 rounded-xl shadow-2xl z-50 p-2">
+            <div class="px-4 py-2 border-b border-white/5 text-sm font-bold text-white">Notificações Críticas</div>
+            <div class="p-3 hover:bg-white/5 rounded cursor-pointer transition-colors border-l-2 border-accent-red mt-1">
+              <div class="flex justify-between items-start">
+                <h4 class="text-accent-red font-bold text-xs uppercase">Ação Necessária</h4>
+                <span class="text-[10px] text-gray-500">Hoje</span>
               </div>
-              <div class="flex items-start gap-4">
-                <i data-lucide="users-round" class="w-6 h-6 text-status-info flex-shrink-0"></i>
-                <div>
-                  <h4 class="font-heading text-lg font-semibold text-white">Contabilidade</h4>
-                  <p class="text-sm mt-1">Sistema em uso. Necessita de treinamento adicional para otimizar a gestão de serviços e a adoção plena do Kanban. <span class="text-status-info font-semibold">Em Otimização.</span></p>
-                </div>
-              </div>
-              <div class="flex items-start gap-4">
-                <i data-lucide="alert-triangle" class="w-6 h-6 text-status-warning flex-shrink-0"></i>
-                <div>
-                  <h4 class="font-heading text-lg font-semibold text-white">Fiscal</h4>
-                  <p class="text-sm mt-1">Operacional, mas requer revisão de responsáveis, regimes tributários e serviços cadastrados para garantir precisão máxima. <span class="text-status-warning font-semibold">Ajustes Pendentes.</span></p>
-                </div>
-              </div>
-              <div class="flex items-start gap-4">
-                <i data-lucide="octagon-alert" class="w-6 h-6 text-status-danger flex-shrink-0"></i>
-                <div>
-                  <h4 class="font-heading text-lg font-semibold text-white">Departamento Pessoal (DP)</h4>
-                  <p class="text-sm mt-1">Configuração inicial impacta a finalização das tarefas. Reparametrização completa dos serviços é urgente. <span class="text-status-danger font-semibold">Ação Crítica.</span></p>
-                </div>
-              </div>
+              <p class="text-sm text-gray-300 mt-1">Atualizar API Hub Financeiro para <strong>Nweb</strong>. Configuração pendente com Catiana.</p>
             </div>
-          </div>
-          <div class="ui-card p-8 rounded-card">
-            <h3 class="font-heading text-2xl text-white font-bold mb-4">Tareffa Comunicação</h3>
-            <p class="text-gray-text leading-relaxed text-lg mb-6">
-              A integração da comunicação no Tareffa é uma escolha estratégica para centralizar informações e aproveitar recursos como a cobrança automática de arquivos.
-            </p>
-            <div class="space-y-4 text-gray-text">
-              <div class="flex items-start gap-4">
-                <i data-lucide="hourglass" class="w-6 h-6 text-status-info flex-shrink-0"></i>
-                <div>
-                  <h4 class="font-heading text-lg font-semibold text-white">Status Atual</h4>
-                  <p class="text-sm mt-1">Pausado, aguardando testes da nova atualização (informada como concluída). A viabilidade da integração será reavaliada após validação.</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-4">
-                <i data-lucide="message-square" class="w-6 h-6 text-status-info flex-shrink-0"></i>
-                <div>
-                  <h4 class="font-heading text-lg font-semibold text-white">Próximos Passos</h4>
-                  <p class="text-sm mt-1">Testar a nova versão da funcionalidade de comunicação. Se validada, será integrado o mais rápido possível.</p>
-                </div>
-              </div>
+            <div class="p-3 hover:bg-white/5 rounded cursor-pointer transition-colors border-l-2 border-accent-gold mt-1">
+              <h4 class="text-accent-gold font-bold text-xs uppercase">Pendente</h4>
+              <p class="text-sm text-gray-300 mt-1">Aprovação docmost (Sirlovani).</p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </header>
 
-      <!-- Legacy Systems -->
-      <section id="legacy-systems" data-aos="fade-up" data-aos-duration="800">
-        <h2 class="font-heading text-3xl text-white font-bold">Sistemas Legado & Transição</h2>
-        <div class="section-divider"></div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="ui-card p-6 rounded-card">
-            <div class="flex items-center gap-4 mb-3">
-              <i data-lucide="archive" class="w-7 h-7 text-gray-muted"></i>
-              <h3 class="font-heading text-xl text-white font-bold">DigiSac (Descontinuação)</h3>
-            </div>
-            <p class="text-sm text-gray-text leading-relaxed">
-              De uma plataforma desorganizada e subutilizada, transformei o DigiSac em uma ferramenta funcional com robôs de autoatendimento e padronização de tags. Apesar da baixa verificação pela gestão, sinto orgulho do sucesso técnico alcançado. Será descontinuado de forma organizada.
-            </p>
-          </div>
-          <div class="ui-card p-6 rounded-card">
-            <div class="flex items-center gap-4 mb-3">
-              <i data-lucide="clipboard-user" class="w-7 h-7 text-status-info"></i>
-              <h3 class="font-heading text-xl text-white font-bold">Quark RH (Suporte)</h3>
-            </div>
-            <p class="text-sm text-gray-text leading-relaxed">
-              Ajudei na complexa implementação inicial e importação de planilhas. Atualmente, meu papel é de acompanhamento para o RH da HDL se ambientar, pois a gestão do sistema é responsabilidade da Aline (RH). Estima-se 75-80% de configuração.
-            </p>
-          </div>
-          <div class="ui-card p-6 rounded-card">
-            <div class="flex items-center gap-4 mb-3">
-              <i data-lucide="phone" class="w-7 h-7 text-gold-400"></i>
-              <h3 class="font-heading text-xl text-white font-bold">Telefonia IP</h3>
-            </div>
-            <p class="text-sm text-gray-text leading-relaxed">
-              A infraestrutura de Telefonia IP está estável e em pleno uso. A responsabilidade pela manutenção e suporte técnico da solução é da Sanfer.
-            </p>
-          </div>
-        </div>
-      </section>
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto p-8 scroll-smooth">
       
-      <!-- Vector Ecosystem -->
-      <section id="vector-ecosystem" data-aos="fade-up" data-aos-duration="800">
-        <h2 class="font-heading text-3xl text-white font-bold">Ecossistema Vector: Uma Análise da Parceria</h2>
-        <div class="section-divider"></div>
-        <div class="ui-card p-8 rounded-card">
-          <div class="flex flex-col lg:flex-row items-start gap-8">
-            <div class="flex-shrink-0 text-center">
-              <div class="w-24 h-24 flex items-center justify-center rounded-full bg-accent-blue/15 text-accent-blue mx-auto">
-                <i data-lucide="network" class="w-12 h-12"></i>
+      <!-- TAB: VISÃO GERAL -->
+      <div x-show="currentTab === 'overview'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+        
+        <h1 class="text-3xl font-bold text-white mb-6">Dashboard Executivo</h1>
+
+        <!-- Status Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <!-- Card 1 -->
+          <div class="glass-panel p-5 rounded-xl border-l-4 border-accent-green relative overflow-hidden group">
+            <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="message-square" class="w-16 h-16 text-accent-green"></i></div>
+            <p class="text-gray-400 text-xs font-mono uppercase">Comunicação</p>
+            <h3 class="text-2xl font-bold text-white mt-1">Tareffa <span class="text-accent-green">ON</span></h3>
+            <p class="text-xs text-gray-500 mt-2">DigiSac Descontinuado</p>
+          </div>
+          
+          <!-- Card 2 -->
+          <div class="glass-panel p-5 rounded-xl border-l-4 border-accent-purple relative overflow-hidden group">
+            <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="cpu" class="w-16 h-16 text-accent-purple"></i></div>
+            <p class="text-gray-400 text-xs font-mono uppercase">Desenvolvimento</p>
+            <h3 class="text-2xl font-bold text-white mt-1">Hub Financeiro</h3>
+            <p class="text-xs text-gray-500 mt-2">Implementando DRE + JWT</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="glass-panel p-5 rounded-xl border-l-4 border-accent-gold relative overflow-hidden group">
+            <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="file-text" class="w-16 h-16 text-accent-gold"></i></div>
+            <p class="text-gray-400 text-xs font-mono uppercase">Vector</p>
+            <h3 class="text-2xl font-bold text-white mt-1">Documentação</h3>
+            <p class="text-xs text-gray-500 mt-2">Docmost / Aguard. Aprovação</p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="glass-panel p-5 rounded-xl border-l-4 border-accent-red relative overflow-hidden group hover:shadow-neon-gold/20 transition-shadow cursor-pointer" @click="currentTab = 'roadmap'">
+            <div class="absolute right-0 top-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i data-lucide="alert-triangle" class="w-16 h-16 text-accent-red"></i></div>
+            <p class="text-accent-red text-xs font-mono uppercase font-bold animate-pulse">Ação Crítica</p>
+            <h3 class="text-2xl font-bold text-white mt-1">API Nweb</h3>
+            <p class="text-xs text-gray-500 mt-2">Atualização necessária</p>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 glass-panel p-6 rounded-xl">
+            <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4 text-accent-blue"></i> Progresso de Implementação</h3>
+            <div id="chart-timeline" class="w-full h-72"></div>
+          </div>
+          <div class="glass-panel p-6 rounded-xl flex flex-col items-center justify-center">
+            <h3 class="text-white font-bold mb-2">Maturidade Hub Financeiro</h3>
+            <div id="chart-gauge" class="w-full flex justify-center"></div>
+            <div class="text-center mt-[-20px]">
+              <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">Dev Solo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: HDL OPERAÇÕES -->
+      <div x-show="currentTab === 'hdl'" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+        <h1 class="text-3xl font-bold text-white mb-2">HDL Operações</h1>
+        <p class="text-gray-400 mb-8">Status detalhado dos sistemas internos e processos.</p>
+
+        <div class="space-y-6">
+          <!-- Communication Block -->
+          <div class="glass-panel p-6 rounded-xl border border-accent-green/30">
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex items-center gap-3">
+                <div class="p-2 bg-accent-green/20 rounded-lg text-accent-green"><i data-lucide="check-circle-2" class="w-6 h-6"></i></div>
+                <div>
+                  <h3 class="text-xl font-bold text-white">Tareffa Comunicação</h3>
+                  <p class="text-sm text-gray-400">Implementação Completa</p>
+                </div>
               </div>
-              <h3 class="font-heading text-xl text-white font-semibold mt-4">Plataforma de Inovação</h3>
+              <span class="px-3 py-1 bg-accent-green/10 text-accent-green text-xs font-bold rounded border border-accent-green/20">STATUS: ATIVO</span>
             </div>
-            <div class="flex-1">
-              <p class="text-gray-text leading-relaxed text-lg mb-4">
-                A atuação dentro do ecossistema da Vector em 2025 foi marcada por um crescimento mútuo e uma sinergia excepcional. A Vector provou ser mais do que um local de trabalho; funcionou como uma <strong>plataforma de inovação</strong>.
-              </p>
-              <p class="text-gray-text leading-relaxed text-lg">
-                A autonomia concedida foi fundamental para diagnosticar problemas complexos na HDL e implementar soluções de alto impacto, como a reestruturação de processos no Tareffa e a otimização de sistemas legado. Além da reestruturação, o ambiente na Vector fomentou o desenvolvimento de novas tecnologias. Projetos como o <strong>SCE (Stars Control Enterprises)</strong> e a evolução do <strong>Projeto PDV</strong> nasceram dessa liberdade criativa, com potencial para se tornarem ativos estratégicos para a própria Vector.
-              </p>
-              <blockquote class="border-l-4 border-gold-500 pl-6 py-2 mt-6 italic text-lg font-medium text-gold-400">
-                "Só vejo crescimento e um vasto campo para progredir aqui dentro. Acredito que a parceria continuará sendo extremamente benéfica para ambos os lados, transformando desafios em oportunidades e ideias em produtos de valor."
-              </blockquote>
+            <div class="bg-black/40 p-4 rounded-lg text-sm text-gray-300 space-y-2">
+              <p>✅ <strong>DigiSac Descontinuado:</strong> Substituição completa (Exceto Financeiro por segurança).</p>
+              <p>✅ <strong>Acompanhamento:</strong> Monitoramento ativo de estabilidade e melhorias.</p>
+              <p>⚙️ <strong>Próximo Passo:</strong> Configuração do Robô <strong>QUIU (Questor)</strong> para automação Fiscal x Contábil.</p>
+            </div>
+          </div>
+
+          <!-- Departments Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel p-6 rounded-xl">
+              <h4 class="text-white font-bold mb-4 border-b border-white/10 pb-2">Suporte & Departamentos</h4>
+              <ul class="space-y-3 text-sm text-gray-400">
+                <li class="flex items-start gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-accent-blue mt-0.5"></i> <span>Auxílio contínuo na criação de serviços.</span></li>
+                <li class="flex items-start gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-accent-blue mt-0.5"></i> <span>Desenvolvimento de automações internas.</span></li>
+                <li class="flex items-start gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-accent-blue mt-0.5"></i> <span>Padronização de processos no Tareffa.</span></li>
+              </ul>
+            </div>
+            
+            <div class="glass-panel p-6 rounded-xl border border-accent-gold/20">
+              <h4 class="text-white font-bold mb-4 border-b border-white/10 pb-2 text-accent-gold">Metas de Infraestrutura (HDL)</h4>
+              <ul class="space-y-3 text-sm text-gray-300">
+                <li class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center"><i data-lucide="monitor" class="w-4 h-4"></i></div>
+                  <div>
+                    <strong class="block text-white">PC Stick (Fiscal)</strong>
+                    <span class="text-xs text-gray-500">Compra necessária para Dashboard na TV.</span>
+                  </div>
+                </li>
+                <li class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center"><i data-lucide="bot" class="w-4 h-4"></i></div>
+                  <div>
+                    <strong class="block text-white">Cobra Arquivos</strong>
+                    <span class="text-xs text-gray-500">Melhorar automação de cobrança.</span>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- Future Outlook -->
-      <section id="future-outlook" data-aos="fade-up" data-aos-duration="800">
-        <h2 class="font-heading text-3xl text-white font-bold">Visão de Futuro e Próximos Passos Estratégicos (2026)</h2>
-        <div class="section-divider"></div>
-        <div class="ui-card p-8 rounded-card">
-          <p class="text-gray-text leading-relaxed text-lg mb-6">
-            O próximo ano será focado na consolidação das implementações, na otimização dos processos existentes e, principalmente, na aceleração do desenvolvimento de novas tecnologias. Acredito firmemente que a parceria com a Vector possui um potencial de crescimento exponencial para ambas as partes.
-          </p>
-          <div class="space-y-4 text-gray-text">
-            <h3 class="font-heading text-xl text-white font-semibold mb-3">Principais Prioridades:</h3>
-            <ul class="list-disc list-inside space-y-2 text-base">
-              <li><strong>SCE (Stars Control Enterprises):</strong> Avançar no desenvolvimento, focado na reunião de integração com a Questor e formalização da parceria.</li>
-              <li><strong>Tareffa Comunicação:</strong> Testar e integrar o módulo de comunicação o mais rápido possível, aproveitando novas funcionalidades como a cobrança automática de arquivos.</li>
-              <li><strong>Projeto PDV:</strong> Finalizar a implementação da funcionalidade de faturamento direto assim que a API for liberada.</li>
-              <li><strong>Tareffa (Manutenção):</strong> Realizar treinamentos adicionais para a Contabilidade e reparametrização urgente do Departamento Pessoal.</li>
-              <li><strong>Quark RH:</strong> Continuar o acompanhamento do RH da HDL para garantir a plena utilização do sistema.</li>
-            </ul>
+      <!-- TAB: DESENVOLVIMENTO -->
+      <div x-show="currentTab === 'dev'" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+        <h1 class="text-3xl font-bold text-white mb-2">Hub & Vector</h1>
+        <p class="text-gray-400 mb-8">Status dos projetos de desenvolvimento de software.</p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          
+          <!-- Coluna Esquerda: Hub Financeiro (Maior destaque) -->
+          <div class="lg:col-span-2 space-y-6">
+            <div class="glass-panel p-8 rounded-xl border-t-4 border-accent-blue relative overflow-hidden">
+              <div class="absolute -right-10 -top-10 w-40 h-40 bg-accent-blue/10 rounded-full blur-3xl"></div>
+              
+              <div class="flex justify-between items-start">
+                <div>
+                  <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    Hub Financeiro Vector
+                    <span class="text-[10px] bg-accent-blue text-black px-2 py-0.5 rounded font-bold uppercase">Dev Solo</span>
+                  </h2>
+                  <p class="text-gray-400 mt-2 text-sm max-w-lg">Sistema de gestão financeira proprietário. Desenvolvimento full-stack, segurança e lógica de negócio.</p>
+                </div>
+                <div class="text-right">
+                  <div class="text-3xl font-bold text-accent-blue">35%</div>
+                  <div class="text-xs text-gray-500">Concluído</div>
+                </div>
+              </div>
+
+              <!-- Tech Stack Tags -->
+              <div class="flex flex-wrap gap-2 mt-4 mb-6">
+                <span class="px-2 py-1 bg-white/5 rounded text-xs font-mono text-gray-300 border border-white/10">Node.js</span>
+                <span class="px-2 py-1 bg-white/5 rounded text-xs font-mono text-gray-300 border border-white/10">JWT Auth</span>
+                <span class="px-2 py-1 bg-white/5 rounded text-xs font-mono text-gray-300 border border-white/10">Markup Logic</span>
+                <span class="px-2 py-1 bg-white/5 rounded text-xs font-mono text-gray-300 border border-white/10">Robô Projeção</span>
+              </div>
+
+              <div class="space-y-4">
+                <div class="bg-bg-main p-4 rounded-lg border-l-2 border-accent-purple">
+                  <h4 class="text-accent-purple font-bold text-sm mb-1">🚀 Em Progresso: Interpretação de DRE</h4>
+                  <p class="text-sm text-gray-400">Implementando leitura de planilhas de DRE para alimentar o robô de projeção. O sistema irá cruzar lançamentos manuais com dados contábeis.</p>
+                </div>
+
+                <div class="bg-accent-red/10 p-4 rounded-lg border border-accent-red/30 flex items-start gap-3">
+                  <i data-lucide="siren" class="w-6 h-6 text-accent-red flex-shrink-0 animate-pulse"></i>
+                  <div>
+                    <h4 class="text-accent-red font-bold text-sm">ALERTA DE INTEGRAÇÃO</h4>
+                    <p class="text-sm text-gray-300 mt-1">
+                      Necessário atualizar a API para <strong>Nweb</strong>. <br>
+                      <span class="text-xs opacity-75">1. Configurar Robô Quiu. | 2. Solicitar config Nweb para Catiana. | 3. Atualizar endpoint no código.</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Coluna Direita: Vector & PDV -->
+          <div class="space-y-6">
+            <!-- PDV Card -->
+            <div class="glass-panel p-6 rounded-xl">
+              <h3 class="text-white font-bold mb-3 flex items-center gap-2"><i data-lucide="shopping-cart" class="w-4 h-4 text-accent-gold"></i> Vector PDV</h3>
+              <div class="flex items-center gap-2 mb-4">
+                <div class="h-2 w-full bg-gray-700 rounded-full overflow-hidden">
+                  <div class="h-full bg-accent-gold w-[95%]"></div>
+                </div>
+                <span class="text-xs font-bold text-accent-gold">95%</span>
+              </div>
+              <p class="text-sm text-gray-400 bg-white/5 p-3 rounded border border-white/5">
+                <span class="text-accent-gold font-bold">Bloqueado:</span> Esperando API de Ponto ser entregue para finalizar a integração. Atualização prevista em poucas horas após entrega.
+              </p>
+            </div>
+
+            <!-- Docmost Card -->
+            <div class="glass-panel p-6 rounded-xl">
+              <h3 class="text-white font-bold mb-3 flex items-center gap-2"><i data-lucide="book" class="w-4 h-4 text-blue-400"></i> Documentação</h3>
+              <p class="text-sm text-gray-400 mb-3">Manuais de Cliente e Suporte sendo criados no <strong>Docmost</strong>.</p>
+              <div class="flex items-center justify-between text-xs bg-blue-500/10 text-blue-400 px-3 py-2 rounded">
+                <span>Status:</span>
+                <span class="font-bold">Aguardando Aprovação (Sirlovani)</span>
+              </div>
+            </div>
+          </div>
+
         </div>
-      </section>
+      </div>
 
-      <!-- Footer -->
-      <footer class="text-center text-sm text-gray-muted mt-12 pt-8 border-t border-[#2A2A3A]">
-        Desenvolvido por Nicolas. Para uso interno HDL Contabilidade & Vector.
-      </footer>
+      <!-- TAB: ROADMAP -->
+      <div x-show="currentTab === 'roadmap'" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
+        <h1 class="text-3xl font-bold text-white mb-6">Metas & Próximos Passos</h1>
+        
+        <div class="relative border-l border-white/10 ml-4 space-y-8">
+          
+          <!-- Item 1 -->
+          <div class="ml-6 relative">
+            <span class="absolute -left-[33px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-accent-red ring-4 ring-bg-main"></span>
+            <h3 class="text-lg font-bold text-white">Curto Prazo (Urgente)</h3>
+            <div class="mt-2 glass-panel p-4 rounded-lg">
+              <ul class="list-disc list-inside text-sm text-gray-300 space-y-2">
+                <li><span class="text-accent-red font-bold">HUB:</span> Mudar API para Nweb (Atualização Crítica).</li>
+                <li><span class="text-accent-red font-bold">QUESTOR:</span> Configurar Robô Quiu (Importação Fiscal x Contábil).</li>
+                <li><span class="text-accent-gold font-bold">VECTOR:</span> Aprovar documentação Docmost.</li>
+              </ul>
+            </div>
+          </div>
 
-    </article>
+          <!-- Item 2 -->
+          <div class="ml-6 relative">
+            <span class="absolute -left-[33px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-accent-blue ring-4 ring-bg-main"></span>
+            <h3 class="text-lg font-bold text-white">Médio Prazo (Melhorias)</h3>
+            <div class="mt-2 glass-panel p-4 rounded-lg">
+              <ul class="list-disc list-inside text-sm text-gray-300 space-y-2">
+                <li><strong>HDL:</strong> Compra de PC Stick para TV do Fiscal (Dashboard).</li>
+                <li><strong>HDL:</strong> Criar automação "Cobra Arquivos" no Tareffa.</li>
+                <li><strong>HUB:</strong> Finalizar leitura de DRE + Robô de Projeção.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="ml-6 relative">
+            <span class="absolute -left-[33px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-accent-purple ring-4 ring-bg-main"></span>
+            <h3 class="text-lg font-bold text-white">Estratégico (Inovação)</h3>
+            <div class="mt-2 glass-panel p-4 rounded-lg">
+              <ul class="list-disc list-inside text-sm text-gray-300 space-y-2">
+                <li><strong>BI:</strong> Obter APIs do Tareffa para criar gráficos avançados para departamentos.</li>
+                <li><strong>HUB:</strong> Melhorar lógica de Markup do sistema.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
   </main>
-</div>
 
-<!-- JS Libraries and Custom Script -->
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-  // Inicialização de Lucide Icons e AOS
-  document.addEventListener('DOMContentLoaded', () => {
+  <script>
+    // Inicialização dos Ícones
     lucide.createIcons();
-    AOS.init({ duration: 900, once: true, easing: 'ease-out-cubic', delay: 100 });
-  });
 
-  // Efeito de hover nos cartões
-  document.querySelectorAll('.ui-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    });
-  });
+    // Chart: Timeline (Bar Chart horizontal simulando timeline)
+    var optionsTimeline = {
+      series: [{
+        name: 'Progresso',
+        data: [100, 95, 80, 35]
+      }],
+      chart: {
+        type: 'bar',
+        height: 250,
+        toolbar: { show: false },
+        background: 'transparent'
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+          barHeight: '40%',
+          distributed: true
+        }
+      },
+      colors: ['#10b981', '#fbbf24', '#8b5cf6', '#3b82f6'],
+      dataLabels: {
+        enabled: true,
+        formatter: function (val) { return val + "%" },
+        style: { colors: ['#fff'] }
+      },
+      xaxis: {
+        categories: ['Comunicação HDL', 'PDV Vector', 'Quark RH', 'Hub Financeiro'],
+        labels: { style: { colors: '#a1a1aa' } },
+        max: 100
+      },
+      yaxis: {
+        labels: { style: { colors: '#fff', fontWeight: 600 } }
+      },
+      grid: {
+        borderColor: '#27272a',
+        xaxis: { lines: { show: true } }
+      },
+      theme: { mode: 'dark' },
+      tooltip: { theme: 'dark' },
+      legend: { show: false }
+    };
+    var chartTimeline = new ApexCharts(document.querySelector("#chart-timeline"), optionsTimeline);
+    chartTimeline.render();
 
-  // Configuração dos gráficos
-  const chartOptionsBase = {
-    chart: { background: 'transparent', toolbar: { show: false } },
-    theme: { mode: 'dark', palette: 'palette1' },
-    tooltip: { theme: 'dark', style: { fontFamily: 'Inter' } },
-    legend: { labels: { colors: '#C0C0C0' }, fontFamily: 'Inter' }
-  };
-
-  // Gráfico de Maturidade (Barra Horizontal)
-  const maturityOptions = {
-    ...chartOptionsBase,
-    series: [{ name: 'Maturidade', data: [95, 90, 80, 25] }],
-    chart: { ...chartOptionsBase.chart, type: 'bar', height: 280 },
-    plotOptions: { bar: { borderRadius: 6, horizontal: true, distributed: true, barHeight: '60%' } },
-    colors: ['#f59e0b', '#4ECDC4', '#60A5FA', '#facc15'],
-    dataLabels: { enabled: true, textAnchor: 'start', style: { colors: ['#0C0C12'], fontSize: '14px', fontWeight: 'bold' }, formatter: (val) => val + "%", offsetX: 15 },
-    xaxis: { 
-      categories: ['Projeto PDV', 'Tareffa', 'Quark RH', 'SCE (SaaS)'], 
-      labels: { style: { colors: '#7B7B87', fontFamily: 'Inter' } }, 
-      max: 100, axisBorder: { show: false }, axisTicks: { show: false } 
-    },
-    yaxis: { labels: { style: { colors: '#C0C0C0', fontFamily: 'Inter', fontWeight: 600, fontSize: '14px' } } },
-    grid: { show: true, borderColor: '#2A2A3A', strokeDashArray: 3, xaxis: { lines: { show: true } }, yaxis: { lines: { show: false } } },
-    legend: { show: false }
-  };
-  new ApexCharts(document.querySelector("#chartMaturity"), maturityOptions).render();
-
-  // Gráfico de Esforço (Donut)
-  const effortOptions = {
-    ...chartOptionsBase,
-    series: [50, 20, 20, 10],
-    labels: ['SCE (SaaS)', 'Projeto PDV', 'Tareffa', 'Suporte Geral'],
-    chart: { ...chartOptionsBase.chart, type: 'donut', height: 300 },
-    colors: ['#4ECDC4', '#f59e0b', '#60A5FA', '#7B7B87'],
-    stroke: { show: true, colors: ['#15151F'], width: 5 },
-    dataLabels: { enabled: true, formatter: (val) => val.toFixed(0) + '%', style: { colors: ['#0C0C12'], fontSize: '14px', fontWeight: 'bold' } },
-    legend: { show: true, position: 'bottom', labels: { colors: '#C0C0C0' }, markers: { radius: 12 }, itemMargin: { horizontal: 10 } },
-  };
-  new ApexCharts(document.querySelector("#chartEffort"), effortOptions).render();
-</script>
-
+    // Chart: Gauge (Radial Bar para o Hub)
+    var optionsGauge = {
+      series: [35],
+      chart: {
+        height: 220,
+        type: 'radialBar',
+        background: 'transparent'
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: -135,
+          endAngle: 135,
+          hollow: {
+            margin: 15,
+            size: '60%',
+            background: 'transparent',
+            image: undefined,
+          },
+          track: {
+            background: '#27272a',
+            strokeWidth: '100%',
+            margin: 0, 
+          },
+          dataLabels: {
+            show: true,
+            name: {
+              offsetY: 20,
+              show: true,
+              color: '#888',
+              fontSize: '12px'
+            },
+            value: {
+              offsetY: -10,
+              color: '#fff',
+              fontSize: '22px',
+              show: true,
+              formatter: function (val) {
+                return val + "%";
+              }
+            }
+          }
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'dark',
+          type: 'horizontal',
+          shadeIntensity: 0.5,
+          gradientToColors: ['#3b82f6'],
+          inverseColors: true,
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [0, 100]
+        }
+      },
+      stroke: {
+        lineCap: 'round'
+      },
+      labels: ['Progresso Geral'],
+      colors: ['#2563eb']
+    };
+    var chartGauge = new ApexCharts(document.querySelector("#chart-gauge"), optionsGauge);
+    chartGauge.render();
+  </script>
 </body>
 </html>
