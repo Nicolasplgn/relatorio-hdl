@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>HDL & Vector | Command Center</title>
+  <title>HDL & Vector | Strategic Command</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,7 +27,7 @@
           },
           colors: {
             bg: {
-              main: '#050507', 
+              main: '#030304', 
               card: '#0f0f13',
             },
             accent: {
@@ -44,7 +44,7 @@
   </script>
 
   <style>
-    /* --- Fundo e Estrutura --- */
+    /* --- Fundo e Estrutura (Estilo v2.0) --- */
     body {
       background-color: #030304;
       color: #e4e4e7;
@@ -95,13 +95,13 @@
   </style>
 </head>
 
-<body class="h-screen flex overflow-hidden" x-data="{ currentTab: 'overview', sidebarOpen: true, notificationsOpen: false }">
+<body class="h-screen flex overflow-hidden selection:bg-accent-gold selection:text-black" x-data="{ currentTab: 'overview', sidebarOpen: true, notificationsOpen: false }">
 
   <!-- Sidebar -->
-  <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="flex-shrink-0 bg-[#070709]/90 backdrop-blur-xl border-r border-white/5 flex flex-col transition-all duration-300 z-30 shadow-2xl">
+  <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="flex-shrink-0 bg-[#070709]/90 backdrop-blur-xl border-r border-white/5 flex flex-col transition-all duration-300 z-30 shadow-2xl relative">
     
     <!-- Logo -->
-    <div class="h-20 flex items-center justify-center relative">
+    <div class="h-20 flex items-center justify-center relative border-b border-white/5">
       <div class="flex items-center gap-3" x-show="sidebarOpen" x-transition.opacity>
         <div class="w-9 h-9 rounded bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center text-black font-bold font-mono text-lg shadow-[0_0_15px_rgba(234,179,8,0.3)]">H</div>
         <div class="flex flex-col">
@@ -111,7 +111,7 @@
       </div>
       <div x-show="!sidebarOpen" class="w-9 h-9 rounded bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center text-black font-bold font-mono">H</div>
       
-      <button @click="sidebarOpen = !sidebarOpen" class="absolute -right-3 top-8 w-6 h-6 bg-[#18181b] border border-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-accent-gold transition-colors">
+      <button @click="sidebarOpen = !sidebarOpen" class="absolute -right-3 top-8 w-6 h-6 bg-[#18181b] border border-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-accent-gold transition-colors z-50">
         <i data-lucide="chevron-left" class="w-3 h-3 transition-transform" :class="!sidebarOpen && 'rotate-180'"></i>
       </button>
     </div>
@@ -166,7 +166,7 @@
         <h2 class="text-xl font-bold text-white flex items-center gap-2">
           <span class="text-accent-gold font-mono">//</span> Status Report
         </h2>
-        <span class="text-[10px] text-gray-500 font-mono bg-white/5 px-2 py-0.5 rounded border border-white/5">v.2026.1 (Jan)</span>
+        <span class="text-[10px] text-gray-500 font-mono bg-white/5 px-2 py-0.5 rounded border border-white/5">22 Jan 2026 - 13:49</span>
       </div>
 
       <div class="flex items-center gap-4">
@@ -180,19 +180,25 @@
         <div class="relative" @click="notificationsOpen = !notificationsOpen">
           <button class="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center transition-colors relative">
             <i data-lucide="bell" class="w-5 h-5 text-gray-400"></i>
-            <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-accent-red rounded-full border border-[#0f0f13]"></span>
+            <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-accent-red rounded-full border border-[#0f0f13] animate-pulse"></span>
           </button>
           
-          <div x-show="notificationsOpen" @click.away="notificationsOpen = false" x-transition class="absolute right-0 top-12 w-80 bg-[#121217] border border-white/10 rounded-xl shadow-2xl z-50 p-1">
-             <div class="p-3 border-b border-white/5 text-xs font-bold text-gray-400 uppercase tracking-wider">Notificações</div>
+          <div x-show="notificationsOpen" @click.away="notificationsOpen = false" x-transition class="absolute right-0 top-12 w-96 bg-[#121217] border border-white/10 rounded-xl shadow-2xl z-50 p-1">
+             <div class="p-3 border-b border-white/5 text-xs font-bold text-gray-400 uppercase tracking-wider">Notificações Críticas</div>
              <div class="max-h-64 overflow-y-auto">
-               <div class="p-3 hover:bg-white/5 rounded cursor-pointer border-l-2 border-accent-red m-1">
+               <div class="p-3 hover:bg-white/5 rounded cursor-pointer border-l-2 border-accent-red m-1 bg-accent-red/5">
                  <div class="flex justify-between">
-                   <span class="text-accent-red font-bold text-[10px] uppercase">Crítico</span>
+                   <span class="text-accent-red font-bold text-[10px] uppercase">Ação Necessária</span>
                    <span class="text-[10px] text-gray-600">Hoje</span>
                  </div>
-                 <p class="text-xs text-gray-300 mt-1">Atualizar API Hub para Nweb.</p>
+                 <p class="text-sm text-gray-300 mt-1">Atualizar API Hub para <strong>Nweb</strong>. Pendente config Catiana.</p>
                </div>
+               <div class="p-3 hover:bg-white/5 rounded cursor-pointer border-l-2 border-accent-gold m-1">
+                <div class="flex justify-between">
+                  <span class="text-accent-gold font-bold text-[10px] uppercase">Pendente</span>
+                </div>
+                <p class="text-sm text-gray-300 mt-1">Aprovação Docmost (Sirlovani).</p>
+              </div>
              </div>
           </div>
         </div>
@@ -214,10 +220,10 @@
               <i data-lucide="message-square" class="w-32 h-32 text-accent-green"></i>
             </div>
             <p class="text-accent-green text-[10px] font-mono uppercase tracking-widest font-bold mb-1">Comunicação</p>
-            <h3 class="text-2xl font-bold text-white mb-2">Tareffa</h3>
+            <h3 class="text-2xl font-bold text-white mb-2">Tareffa <span class="text-accent-green">ON</span></h3>
             <div class="flex items-center gap-2">
               <div class="w-2 h-2 rounded-full bg-accent-green shadow-[0_0_8px_#10b981]"></div>
-              <span class="text-xs text-gray-400">Sistema Ativo</span>
+              <span class="text-xs text-gray-400">DigiSac Descontinuado</span>
             </div>
           </div>
           
@@ -230,7 +236,7 @@
             <h3 class="text-2xl font-bold text-white mb-2">Hub Fin.</h3>
             <div class="flex items-center gap-2">
               <i data-lucide="loader-2" class="w-3 h-3 text-accent-purple animate-spin"></i>
-              <span class="text-xs text-gray-400">Implementando DRE</span>
+              <span class="text-xs text-gray-400">Implementando DRE + JWT</span>
             </div>
           </div>
 
@@ -256,7 +262,7 @@
             <h3 class="text-2xl font-bold text-white mb-2">API Nweb</h3>
             <div class="flex items-center gap-2">
               <i data-lucide="arrow-right-circle" class="w-3 h-3 text-accent-red"></i>
-              <span class="text-xs text-gray-400">Ver detalhes</span>
+              <span class="text-xs text-gray-400">Atualização Necessária</span>
             </div>
           </div>
         </div>
@@ -269,17 +275,15 @@
             <h3 class="text-white text-sm font-bold mb-4 flex items-center gap-2 uppercase tracking-wide opacity-80">
               <i data-lucide="bar-chart-2" class="w-4 h-4 text-accent-blue"></i> Progresso de Implementação
             </h3>
-            <!-- Altura aumentada para melhor distribuição -->
             <div id="chart-timeline" class="w-full h-80"></div>
           </div>
 
           <!-- Gauge -->
           <div class="glass-panel p-6 rounded-xl flex flex-col items-center justify-center relative">
             <h3 class="text-white text-sm font-bold mb-1 uppercase tracking-wide opacity-80 z-10">Maturidade Hub</h3>
-            <!-- Gráfico sem fundo cinza -->
             <div id="chart-gauge" class="w-full flex justify-center z-10"></div>
             <div class="text-center mt-[-10px] z-10">
-              <span class="text-[10px] font-mono text-blue-300 bg-blue-500/10 border border-blue-500/20 px-3 py-1 rounded">FASE BETA</span>
+              <span class="text-[10px] font-mono text-blue-300 bg-blue-500/10 border border-blue-500/20 px-3 py-1 rounded">DEV SOLO</span>
             </div>
           </div>
         </div>
@@ -299,36 +303,49 @@
                 </div>
                 <div>
                   <h3 class="text-lg font-bold text-white">Tareffa / Fluxo de Atendimento</h3>
-                  <p class="text-xs text-gray-400 mt-1">Status: <span class="text-accent-gold font-bold">EM DEFINIÇÃO</span></p>
+                  <p class="text-xs text-gray-400 mt-1">Status: <span class="text-accent-gold font-bold border border-accent-gold/20 px-1 rounded bg-accent-gold/10">EM DEFINIÇÃO</span></p>
                 </div>
               </div>
             </div>
-            <div class="bg-black/40 p-4 rounded-lg border border-white/5 space-y-2">
-              <p class="text-sm text-gray-300"><strong class="text-white">📄 Plano:</strong> Material inicial com Emerson. Reunião de alinhamento 26/01.</p>
-              <p class="text-sm text-gray-300"><strong class="text-white">🤖 Robô QUIU:</strong> Treinamento agendado para análise de impacto.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-black/40 p-4 rounded-lg border border-white/5">
+                <h5 class="text-white text-xs font-bold mb-2 uppercase text-accent-green">Plano & Alinhamento</h5>
+                <p class="text-sm text-gray-300">Material inicial entregue a Emerson. Nova reunião: <strong>Segunda-feira (26)</strong>. Proposta de retirada de contatos externos.</p>
+              </div>
+              <div class="bg-black/40 p-4 rounded-lg border border-white/5">
+                <h5 class="text-white text-xs font-bold mb-2 uppercase text-accent-purple">Robô QUIU (Questor)</h5>
+                <p class="text-sm text-gray-300">Treinamento agendado para análise de impacto e tempo de usuário. Bugs enviados à Otimizza.</p>
+              </div>
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
              <!-- Suporte -->
              <div class="glass-panel p-6 rounded-xl">
-               <h4 class="text-white font-bold mb-4 text-sm uppercase flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-accent-blue"></i> Suporte</h4>
+               <h4 class="text-white font-bold mb-4 text-sm uppercase flex items-center gap-2"><i data-lucide="users" class="w-4 h-4 text-accent-blue"></i> Suporte & Departamentos</h4>
                <ul class="text-sm text-gray-400 space-y-3">
-                 <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-accent-blue"></i> Auxílio contínuo em serviços.</li>
-                 <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-accent-blue"></i> Padronização de processos Tareffa.</li>
+                 <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-accent-blue"></i> Auxílio contínuo na criação de serviços.</li>
+                 <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-accent-blue"></i> Desenvolvimento de automações internas.</li>
+                 <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-accent-blue"></i> Padronização de processos no Tareffa.</li>
                </ul>
              </div>
              <!-- Infra -->
              <div class="glass-panel p-6 rounded-xl border border-accent-gold/20">
-               <h4 class="text-accent-gold font-bold mb-4 text-sm uppercase flex items-center gap-2"><i data-lucide="server" class="w-4 h-4"></i> Infraestrutura</h4>
+               <h4 class="text-accent-gold font-bold mb-4 text-sm uppercase flex items-center gap-2"><i data-lucide="server" class="w-4 h-4"></i> Metas Infraestrutura</h4>
                <div class="space-y-3">
-                 <div class="flex items-center gap-3 p-2 bg-white/5 rounded">
-                   <i data-lucide="monitor" class="w-4 h-4 text-gray-300"></i>
-                   <div class="text-sm text-white">PC Stick (Fiscal) <span class="text-[10px] text-gray-500 block">Compra necessária</span></div>
+                 <div class="flex items-center gap-3 p-3 bg-white/5 rounded hover:bg-white/10 transition-colors">
+                   <i data-lucide="monitor" class="w-5 h-5 text-gray-300"></i>
+                   <div>
+                     <strong class="text-sm text-white block">PC Stick (Fiscal)</strong>
+                     <span class="text-[10px] text-gray-500">Compra necessária para Dashboard na TV.</span>
+                   </div>
                  </div>
-                 <div class="flex items-center gap-3 p-2 bg-white/5 rounded">
-                    <i data-lucide="code" class="w-4 h-4 text-gray-300"></i>
-                    <div class="text-sm text-white">Cobra Arquivos <span class="text-[10px] text-gray-500 block">Automação pendente</span></div>
+                 <div class="flex items-center gap-3 p-3 bg-white/5 rounded hover:bg-white/10 transition-colors">
+                    <i data-lucide="bot" class="w-5 h-5 text-gray-300"></i>
+                    <div>
+                      <strong class="text-sm text-white block">Cobra Arquivos</strong>
+                      <span class="text-[10px] text-gray-500">Melhorar automação de cobrança.</span>
+                    </div>
                   </div>
                </div>
              </div>
@@ -342,53 +359,85 @@
 
          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Hub Financeiro -->
-            <div class="lg:col-span-2 glass-panel p-6 rounded-xl border-t-2 border-accent-blue">
-               <div class="flex justify-between items-start mb-4">
-                 <div>
-                   <h2 class="text-xl font-bold text-white">Hub Financeiro Vector</h2>
-                   <div class="flex gap-2 mt-2">
-                     <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30 font-bold">BETA</span>
-                     <span class="text-[10px] bg-white/5 text-gray-400 px-2 py-0.5 rounded border border-white/10">Node.js + JWT</span>
+            <div class="lg:col-span-2 space-y-6">
+              <div class="glass-panel p-6 rounded-xl border-t-2 border-accent-blue bg-gradient-to-br from-[#1e3a8a20] to-transparent">
+                 <div class="flex justify-between items-start mb-4">
+                   <div>
+                     <h2 class="text-xl font-bold text-white flex gap-2 items-center">
+                        Hub Financeiro Vector
+                        <span class="text-[10px] bg-accent-blue text-black px-2 py-0.5 rounded font-bold uppercase">Dev Solo</span>
+                     </h2>
+                     <div class="flex gap-2 mt-2">
+                       <span class="text-[10px] bg-white/5 text-gray-300 px-2 py-0.5 rounded border border-white/10">Node.js</span>
+                       <span class="text-[10px] bg-white/5 text-gray-300 px-2 py-0.5 rounded border border-white/10">JWT Auth</span>
+                       <span class="text-[10px] bg-white/5 text-gray-300 px-2 py-0.5 rounded border border-white/10">Markup Logic</span>
+                     </div>
+                   </div>
+                   <h2 class="text-3xl font-bold text-accent-blue">35%</h2>
+                 </div>
+                 
+                 <p class="text-sm text-gray-400 mb-4 leading-relaxed bg-black/20 p-3 rounded border border-white/5">
+                   O sistema encontra-se em <strong>desenvolvimento contínuo</strong>. 
+                   Alocado em <strong>servidor interno da HDL</strong> para que o Emerson acompanhe e valide.
+                   Passando por melhorias de markup e análise de novos módulos.
+                 </p>
+  
+                 <div class="space-y-3">
+                   <div class="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg">
+                      <h4 class="text-accent-purple text-xs font-bold uppercase mb-1">🚀 Em Progresso: Interpretação de DRE</h4>
+                      <p class="text-xs text-gray-300">Leitura de planilhas DRE para alimentar robô de projeção. Cruzamento de lançamentos manuais x contábeis.</p>
+                   </div>
+
+                   <div class="bg-red-500/10 border border-red-500/20 p-3 rounded-lg flex gap-3 items-start animate-pulse-slow">
+                     <i data-lucide="siren" class="w-5 h-5 text-accent-red flex-shrink-0 mt-0.5"></i>
+                     <div>
+                       <h4 class="text-accent-red text-xs font-bold uppercase">ALERTA DE INTEGRAÇÃO</h4>
+                       <p class="text-xs text-gray-300 mt-1">
+                         Necessário atualizar API para <strong>Nweb</strong>. <br>
+                         1. Config Robô Quiu | 2. Solicitar config Catiana | 3. Atualizar endpoint.
+                       </p>
+                     </div>
                    </div>
                  </div>
-                 <h2 class="text-3xl font-bold text-accent-blue">35%</h2>
-               </div>
-               
-               <p class="text-sm text-gray-400 mb-6 leading-relaxed">
-                 Sistema alocado internamente na HDL para validação. 
-                 <br>Atualmente implementando <strong class="text-white">Leitura de DRE</strong> para cruzar dados com o Robô de Projeção.
-               </p>
+              </div>
 
-               <div class="bg-red-500/10 border border-red-500/20 p-4 rounded-lg flex gap-3 items-start">
-                 <i data-lucide="alert-octagon" class="w-5 h-5 text-accent-red flex-shrink-0 mt-0.5"></i>
-                 <div>
-                   <h4 class="text-accent-red text-xs font-bold uppercase">Bloqueio de Integração</h4>
-                   <p class="text-xs text-gray-300 mt-1">Necessário migrar API para Nweb. Configuração pendente (Catiana/Quiu).</p>
-                 </div>
-               </div>
+              <!-- ERP Compras -->
+              <div class="glass-panel p-5 rounded-xl border-l-4 border-accent-green">
+                <h3 class="text-white font-bold mb-2 text-sm flex items-center gap-2">
+                  <i data-lucide="shopping-bag" class="w-4 h-4 text-accent-green"></i> 
+                  ERP Compras (Walcle / Hadoli)
+                </h3>
+                <p class="text-xs text-gray-400 mb-2">Hospedado na AWS (Free Tier). Gráficos completos e cadastro de fornecedores. Preparado para controle de estoque.</p>
+                <span class="text-[10px] text-accent-green bg-accent-green/10 px-2 py-0.5 rounded border border-accent-green/20">EM PRODUÇÃO</span>
+              </div>
             </div>
 
             <!-- Vector Stack -->
             <div class="space-y-6">
-              <div class="glass-panel p-5 rounded-xl">
-                <h3 class="text-white font-bold mb-3 text-sm">Vector Projetos</h3>
+              <div class="glass-panel p-5 rounded-xl border border-white/5">
+                <h3 class="text-white font-bold mb-3 text-sm flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-accent-purple"></i> Projetos Vector</h3>
                 <ul class="space-y-4 relative border-l border-white/10 ml-2 pl-4 py-1">
                   <li class="relative">
                     <span class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent-purple border-2 border-[#121217]"></span>
-                    <strong class="text-white text-sm block">PDV</strong>
-                    <span class="text-xs text-gray-500">Aguardando Endpoint Ponto.</span>
+                    <strong class="text-white text-sm block">Vector PDV</strong>
+                    <span class="text-xs text-gray-500">Aguardando liberação endpoint Ponto.</span>
                   </li>
                   <li class="relative">
-                    <span class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent-gold border-2 border-[#121217]"></span>
-                    <strong class="text-white text-sm block">Documentação</strong>
-                    <span class="text-xs text-gray-500">Docmost em Docker.</span>
+                    <span class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-accent-blue border-2 border-[#121217]"></span>
+                    <strong class="text-white text-sm block">Wiki & Docs</strong>
+                    <span class="text-xs text-gray-500">Docmost (Docker). Aguardando Sirlovani.</span>
+                  </li>
+                  <li class="relative">
+                    <span class="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full bg-gray-500 border-2 border-[#121217]"></span>
+                    <strong class="text-white text-sm block">Módulo Orçamento</strong>
+                    <span class="text-xs text-gray-500">Aguardando validação com Fabrício.</span>
                   </li>
                 </ul>
               </div>
 
-              <div class="glass-panel p-5 rounded-xl border border-accent-green/20">
-                <h3 class="text-white font-bold mb-2 text-sm flex items-center gap-2"><i data-lucide="shopping-bag" class="w-4 h-4 text-accent-green"></i> ERP Compras</h3>
-                <p class="text-xs text-gray-400">Em produção (AWS Free Tier). Walcle/Hadoli utilizando ativamente.</p>
+              <div class="glass-panel p-5 rounded-xl bg-gradient-to-br from-[#121217] to-blue-900/10">
+                <h3 class="text-white font-bold mb-2 text-sm flex items-center gap-2"><i data-lucide="pie-chart" class="w-4 h-4 text-blue-400"></i> BI Executivo</h3>
+                <p class="text-xs text-gray-400">Apresentação de dados para Diretoria. Em análise de viabilidade e disponibilidade.</p>
               </div>
             </div>
          </div>
@@ -396,26 +445,48 @@
 
       <!-- ROADMAP -->
       <div x-show="currentTab === 'roadmap'" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-4" x-transition:enter-end="opacity-100 translate-x-0">
-        <h1 class="text-2xl font-bold text-white mb-6 pl-1 border-l-4 border-accent-red">Roadmap Estratégico</h1>
+        <h1 class="text-2xl font-bold text-white mb-6 pl-1 border-l-4 border-accent-red">Metas & Roadmap</h1>
         
-        <div class="space-y-4">
+        <div class="relative border-l border-white/10 ml-4 space-y-8 pb-8">
+          
           <!-- Item Urgent -->
-          <div class="glass-panel p-5 rounded-xl border-l-4 border-accent-red bg-gradient-to-r from-red-900/10 to-transparent">
-            <h3 class="text-accent-red font-bold uppercase text-xs mb-1 tracking-widest">Urgente (Curto Prazo)</h3>
-            <ul class="space-y-2 mt-2">
-              <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-accent-red"></i> <span><strong>HUB:</strong> Migrar API para Nweb.</span></li>
-              <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-accent-red"></i> <span><strong>QUESTOR:</strong> Configurar Robô Quiu.</span></li>
-            </ul>
+          <div class="ml-6 relative group">
+            <span class="timeline-dot absolute -left-[29px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-accent-red ring-4 ring-bg-main"></span>
+            <h3 class="text-lg font-bold text-white">Curto Prazo (Urgente)</h3>
+            <div class="mt-2 glass-panel p-4 rounded-xl border-l-2 border-accent-red bg-gradient-to-r from-red-900/10 to-transparent">
+              <ul class="space-y-2">
+                <li class="text-sm text-gray-300 flex gap-2"><span class="text-accent-red font-bold">HUB:</span> <span>Mudar API para Nweb (Crítico).</span></li>
+                <li class="text-sm text-gray-300 flex gap-2"><span class="text-accent-red font-bold">QUESTOR:</span> <span>Configurar Robô Quiu.</span></li>
+                <li class="text-sm text-gray-300 flex gap-2"><span class="text-accent-gold font-bold">VECTOR:</span> <span>Aprovar documentação Docmost.</span></li>
+              </ul>
+            </div>
           </div>
 
           <!-- Item Medium -->
-          <div class="glass-panel p-5 rounded-xl border-l-4 border-accent-blue">
-            <h3 class="text-accent-blue font-bold uppercase text-xs mb-1 tracking-widest">Melhorias (Médio Prazo)</h3>
-            <ul class="space-y-2 mt-2">
-              <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-accent-blue"></i> <span><strong>HDL:</strong> Compra PC Stick.</span></li>
-              <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="chevron-right" class="w-4 h-4 text-accent-blue"></i> <span><strong>HUB:</strong> Finalizar Robô Projeção.</span></li>
-            </ul>
+          <div class="ml-6 relative group">
+            <span class="timeline-dot absolute -left-[29px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-accent-blue ring-4 ring-bg-main"></span>
+            <h3 class="text-lg font-bold text-white">Médio Prazo (Melhorias)</h3>
+            <div class="mt-2 glass-panel p-4 rounded-xl border border-white/5">
+              <ul class="space-y-2">
+                <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-accent-blue"></i> <span><strong>HDL:</strong> Compra PC Stick para TV Fiscal.</span></li>
+                <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-accent-blue"></i> <span><strong>HDL:</strong> Automação "Cobra Arquivos" Tareffa.</span></li>
+                <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="arrow-right" class="w-4 h-4 text-accent-blue"></i> <span><strong>HUB:</strong> Finalizar Robô de Projeção.</span></li>
+              </ul>
+            </div>
           </div>
+
+          <!-- Item Strategic -->
+          <div class="ml-6 relative group">
+            <span class="timeline-dot absolute -left-[29px] top-0 flex h-4 w-4 items-center justify-center rounded-full bg-accent-purple ring-4 ring-bg-main"></span>
+            <h3 class="text-lg font-bold text-white">Estratégico (Inovação)</h3>
+            <div class="mt-2 glass-panel p-4 rounded-xl border border-white/5 opacity-80">
+               <ul class="space-y-2">
+                <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="stars" class="w-4 h-4 text-accent-purple"></i> <span><strong>BI:</strong> APIs Tareffa para gráficos avançados.</span></li>
+                <li class="text-sm text-gray-300 flex gap-2"><i data-lucide="stars" class="w-4 h-4 text-accent-purple"></i> <span><strong>HUB:</strong> IA para análise de Markup.</span></li>
+              </ul>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -431,7 +502,7 @@
       theme: { mode: 'dark' },
     };
 
-    // Chart: Timeline (Cleaned Up)
+    // Chart: Timeline (Atualizado com os dados de Jan 22)
     var optionsTimeline = {
       ...commonChartOptions,
       series: [{
@@ -449,25 +520,23 @@
           borderRadius: 4,
           horizontal: true,
           barHeight: '35%',
-          distributed: true, // Cores diferentes por barra
+          distributed: true, 
         }
       },
       colors: ['#10b981', '#fbbf24', '#a855f7', '#3b82f6'],
       dataLabels: {
         enabled: true,
         textAnchor: 'start',
-        // Movendo o label para CIMA da barra para contraste perfeito
         style: { colors: ['#a1a1aa'], fontSize: '11px', fontWeight: 600 },
         offsetX: 0,
         formatter: function (val, opt) {
-          // Retorna apenas a porcentagem
           return val + "%"
         },
       },
       xaxis: {
         categories: ['Comunicação', 'Vector PDV', 'Quark RH', 'Hub Financeiro'],
         labels: { 
-          style: { colors: '#71717a', fontSize: '11px' } // Eixo X mais discreto
+          style: { colors: '#71717a', fontSize: '11px' } 
         },
         axisBorder: { show: false },
         axisTicks: { show: false },
@@ -491,7 +560,7 @@
     };
     new ApexCharts(document.querySelector("#chart-timeline"), optionsTimeline).render();
 
-    // Chart: Gauge (Removed Background Box)
+    // Chart: Gauge (Hub Fin 35%)
     var optionsGauge = {
       ...commonChartOptions,
       series: [35],
@@ -507,10 +576,10 @@
           hollow: {
             margin: 15,
             size: '65%',
-            background: 'transparent', // Transparente para casar com o vidro
+            background: 'transparent', 
           },
           track: {
-            background: 'rgba(255,255,255,0.05)', // Track sutil
+            background: 'rgba(255,255,255,0.05)', 
             strokeWidth: '100%',
           },
           dataLabels: {
@@ -540,7 +609,7 @@
           shade: 'dark',
           type: 'horizontal',
           shadeIntensity: 0.5,
-          gradientToColors: ['#60a5fa'], // Azul claro
+          gradientToColors: ['#60a5fa'],
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 1,
@@ -549,7 +618,7 @@
       },
       stroke: { lineCap: 'round' },
       labels: ['Concluído'],
-      colors: ['#2563eb'] // Azul base
+      colors: ['#2563eb'] 
     };
     new ApexCharts(document.querySelector("#chart-gauge"), optionsGauge).render();
   </script>
